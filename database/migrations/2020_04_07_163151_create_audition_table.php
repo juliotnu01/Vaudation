@@ -20,10 +20,12 @@ class CreateAuditionTable extends Migration
             $table->longText('banner_audition')->nullable();
             $table->longText('script_attached_audition')->nullable();
             $table->longText('script_text_audition')->nullable();
-            $table->boolean('status_public_audition')->nullable();
-            $table->boolean('status_available_audition')->nullable();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->date('end_date_available')->nullable();
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+            
             $table->timestamps();
         });
     }

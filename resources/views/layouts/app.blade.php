@@ -34,10 +34,30 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+
                     <ul class="navbar-nav mr-auto">
-
+                        @if (Auth::check() === true)
+                        <li>
+                            <div class="dropdown mr-1 small ">
+                                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Casting
+                                  </button>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <router-link to="/">
+                                        <a href=""  class="dropdown-item">
+                                            Dashboard
+                                        </a>
+                                    </router-link> 
+                                     <router-link to="/audition">
+                                        <a href=""  class="dropdown-item">
+                                            Add Casting
+                                        </a>
+                                    </router-link>
+                                  </div>
+                            </div>
+                        </li>
+                         @endif
                     </ul>
-
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->

@@ -19,10 +19,12 @@ class CreateSceneTable extends Migration
             $table->longText('numbre_scene')->nullable();
             $table->longText('scene_direction')->nullable();
             $table->longText('character_scene')->nullable();
+            $table->longText('descripction_character_scene')->nullable();
             $table->longText('dialogue_scene')->nullable();
-            $table->longText('dimensioning_scene')->nullable();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->bigInteger('id_audition')->unsigned()->nullable();
             $table->foreign('id_audition')->references('id')->on('audition');
             $table->timestamps();

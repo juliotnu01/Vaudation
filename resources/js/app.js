@@ -9,7 +9,6 @@ import { store } from './src/plugins/store'
 Vue.use(Vuex)
 window.Vue = require('vue');
 
-
 const app = new Vue({
     vuetify,
     router,
