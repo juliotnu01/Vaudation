@@ -10,10 +10,10 @@ use DB;
 
 class AuditionController extends Controller
 {
-    public function index(Audition $audition)
+    public function index(Audition $audition, $id_proyect)
     {
         try {
-            return $audition->with('relatedUser')->get();
+            return $audition->where('id_proyect', $id_proyect)->with('relatedUser')->get();
         } catch (Exception $e) {
             throw new Exception($e, 1);
             
@@ -53,6 +53,7 @@ class AuditionController extends Controller
                 $audition->script_attached_audition = asset($pdf);
                 $audition->script_text_audition = $request->script_text_audition;
                 $audition->end_date_available = $request->picker;
+                $audition->id_proyect = $request->id_project;
                 $audition->created_by = Auth::id();
                 $audition->updated_by = Auth::id();
                 $audition->save();

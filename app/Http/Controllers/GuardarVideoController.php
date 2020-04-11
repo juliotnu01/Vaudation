@@ -9,8 +9,7 @@ class GuardarVideoController extends Controller
 {
     public function guardarVideo(Request $request)
     {
-        dd($request);
-        $a = asset(Storage::disk('public')->put($request->nombre, $request->video));
+        $a = asset(Storage::disk('public')->put($request->nombre, file_get_contents($request->file('video'))));
         // dd($a);
     }
 }

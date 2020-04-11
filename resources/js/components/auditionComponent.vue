@@ -192,6 +192,10 @@ export default {
             data_auditions: [],
             pdfName: '',
             imgF: '',
+            array_video: [],
+            mediaRecorder: null,
+            blob: null
+
         }
     },
     methods: {
@@ -201,13 +205,20 @@ export default {
                     return;
                 }
                 this.mediaRecorder.stop();
-                this.mediaRecorder = null;
+                this.blob = new Blob(this.array_video, {
+                                type: "video/webm"
+                            });
+
+                 this.array_video = [];
+                console.log(this.blob);
+                 this.mediaRecorder = null;
+    
                 let form = new FormData();
                 form.append("video", this.blob);
                 form.append("nombre", "grabacion" + new Date().getTime() + ".webm");
-                const { data } = await axios
-                    .post("http://127.0.0.1:8000/api/guardar-video", form)
-                    .catch(console.log("error enviando"));
+                const  dataa  = await axios
+                    .post("/guardar-video", form, { headers: { 'Content-type': 'multipart/form-data' } })
+                    console.log(dataa)
             } catch (error) {
                 console.log(error);
             }
@@ -226,25 +237,21 @@ export default {
                         that.mediaRecorder.addEventListener(
                             "dataavailable",
                             e => {
-                                console.log(e.data);
+                              //  console.log(e.data);
                                 that.array_video.push(e.data);
                             }
                         );
                         that.mediaRecorder.addEventListener("stop", () => {
-                            alert("Finalizó la grabación");
+                            // alert("Finalizó la grabación");
                             video.pause();
-                            that.blob = new Blob(that.array_video, {
-                                type: "video/webm"
-                            });
 
-                            that.array_video = [];
-                            let link = document.createElement("a");
-                            link.href = window.URL.createObjectURL(that.blob);
-                            link.setAttribute(
-                                "download",
-                                "grabacion" + new Date().getTime() + ".webm"
-                            );
-                            link.click();
+                            // let link = document.createElement("a");
+                            // link.href = window.URL.createObjectURL(that.blob);
+                            // link.setAttribute(
+                            //     "download",
+                            //     "grabacion" + new Date().getTime() + ".mp4"
+                            // );
+                            // link.click();
                         });
                     })
                     .catch(error => console.log(error));
@@ -270,6 +277,7 @@ export default {
             data.append('script_text_audition', this.var_script_text_audition)
             data.append('banner_audition', this.var_banner_audition)
             data.append('attachment_audition', this.var_attachment_audition)
+            data.append('id_project', this.$route.params.id_project)
             data.append('picker', this.picker)
 
             try {
@@ -282,7 +290,7 @@ export default {
             }
         },
         async getAudition() {
-            const URL = `get-audition`
+            const URL = `${this.$route.params.id_project}/get-audition`
             try {
                 let { data } = await axios(URL)
                 this.data_auditions = data
@@ -295,7 +303,6 @@ export default {
             try {
                 let { data } = await axios(URL)
                 this.data_scene = data
-                console.log(data)
             } catch (e) {
                 console.log(e);
             }

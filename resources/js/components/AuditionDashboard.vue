@@ -1,6 +1,13 @@
 <template>
     <v-app> 
         <v-layout row wrap>
+            <v-flex xs12 sm12 md12>
+                <v-btn class="mx-2" fab dark color="indigo" >
+                    <router-link :to="{name: 'audition', params:{ id_project: $route.params.id_project}}">
+                        <v-icon dark>mdi-plus</v-icon>
+                    </router-link>
+                </v-btn>
+            </v-flex>
             <v-flex xs12 sm12 md4 class="mb-1" v-for="(audition, key) in data_auditions" :key="audition.id">
                 <v-card max-width="344" class="mx-auto">
                     <v-list-item>
@@ -50,7 +57,7 @@ export default {
     },
     methods: {
         async getAudition() {
-            const URL = `get-audition`
+            const URL = `${this.$route.params.id_project}/get-audition`
             try {
                 let { data } = await axios(URL)
                 this.data_auditions = data

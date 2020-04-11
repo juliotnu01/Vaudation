@@ -40,15 +40,34 @@
                         <li>
                             <div class="dropdown mr-1 small ">
                                   <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Casting
+                                    Project
                                   </button>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <router-link to="/">
                                         <a href=""  class="dropdown-item">
+                                            Dashboard Project
+                                        </a>
+                                    </router-link> 
+                                     <router-link :to="{name:'add.Proyect'}">
+                                        <a href=""  class="dropdown-item">
+                                            Add Project
+                                        </a>
+                                    </router-link>
+                                  </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown mr-1 small ">
+                                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Casting
+                                  </button>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <router-link :to="{name: 'dashboard.audition', params:{id_project: $route.params.id_project}}">
+                                        <a href=""  class="dropdown-item">
                                             Dashboard
                                         </a>
                                     </router-link> 
-                                     <router-link to="/audition">
+                                     <router-link :to="{name: 'audition', params:{id_project: $route.params.id_project}}">
                                         <a href=""  class="dropdown-item">
                                             Add Casting
                                         </a>
