@@ -39,7 +39,7 @@ class ProyectController extends Controller
                     $question->id_proyect = $project->id;
                     $question->save();
                 }
-
+                return Response($project);
             });
         } catch (Exception $e) {
             throw new Exception($e, 1);

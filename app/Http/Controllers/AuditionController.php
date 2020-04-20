@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Audition;
+use App\Models\{Audition,Proyect};
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use DB;
@@ -19,9 +19,13 @@ class AuditionController extends Controller
             
         }
     }
-    public function getauditionspecific(Audition $audition, $id)
+    public function getauditionspecific(Proyect $project, $id_project, $id_audition)
     {
-        return $audition->where('id', $id)->with('relatedScenes')->first();
+        return $project->with(['relatedCasting' => function($q) use ($id_audition){
+             return  $q->where('id', $id_audition)->first();
+        }, 'relatedCasting.relatedScenes' , 'relatedQuestionProject', 'relatedQuestionProject.relatedAnswer' => function($q){
+            return $q->where('user_id', Auth::id());
+        }])->where('id', $id_project)->first();
     }
      public function relatedAuditionWithScene(Audition $audition)
     {
@@ -41,24 +45,17 @@ class AuditionController extends Controller
                 }else{
                     $banner = null;
                 }
-                if (is_file($request->attachment_audition)) {
-                    $pdf = Storage::disk('public')->put('auditions/PDF', $request->file('attachment_audition'));
-                }else {
-                    $pdf = null;
-                }
 
                 $audition->title_audition = $request->title_audition;
                 $audition->description_audition = $request->description_audition;
                 $audition->banner_audition = asset($banner);
-                $audition->script_attached_audition = asset($pdf);
-                $audition->script_text_audition = $request->script_text_audition;
                 $audition->end_date_available = $request->picker;
                 $audition->id_proyect = $request->id_project;
                 $audition->created_by = Auth::id();
                 $audition->updated_by = Auth::id();
                 $audition->save();
 
-            return ['audition' => 'save'];
+            return Response($audition);
             }, 5);
         } catch (Exception $e) {
             throw new Exception($e, 1);

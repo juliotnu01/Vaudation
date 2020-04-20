@@ -56,7 +56,7 @@
                                   </div>
                             </div>
                         </li>
-                        <li>
+                        <!-- <li>
                             <div class="dropdown mr-1 small ">
                                   <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Casting
@@ -74,7 +74,7 @@
                                     </router-link>
                                   </div>
                             </div>
-                        </li>
+                        </li> -->
                          @endif
                     </ul>
                     <!-- Right Side Of Navbar -->

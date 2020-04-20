@@ -15,12 +15,9 @@ class CreateSceneTable extends Migration
     {
         Schema::create('scene', function (Blueprint $table) {
             $table->id();
-            $table->longText('act_scene')->nullable();
-            $table->longText('numbre_scene')->nullable();
-            $table->longText('scene_direction')->nullable();
             $table->longText('character_scene')->nullable();
             $table->longText('descripction_character_scene')->nullable();
-            $table->longText('dialogue_scene')->nullable();
+            $table->longText('script_attached_audition')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')->on('users');

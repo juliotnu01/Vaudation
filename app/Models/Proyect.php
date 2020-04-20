@@ -13,4 +13,8 @@ class Proyect extends Model
     {
         return $this->hasMany(Audition::class, 'id_proyect');
     }
+    public function relatedQuestionProject($value='')
+    {
+        return $this->hasMany(QuestionProyect::class, 'id_proyect');
+    }
 }

@@ -8,4 +8,9 @@ class QuestionProyect extends Model
 {
     protected  $table = 'question_proyect';
     protected  $guarded = [];
+
+    public function relatedAnswer()
+    {
+        return $this->belongsToMany(Aswer::class);
+    }
 }

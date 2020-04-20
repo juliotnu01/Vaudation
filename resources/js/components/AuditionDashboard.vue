@@ -11,24 +11,18 @@
             <v-flex xs12 sm12 md4 class="mb-1" v-for="(audition, key) in data_auditions" :key="audition.id">
                 <v-card max-width="344" class="mx-auto">
                     <v-list-item>
-                        <v-list-item-avatar color="grey">
-                            <v-img :src="audition.banner_audition" height="194"></v-img>
-                        </v-list-item-avatar>
                         <v-list-item-content>
                             <v-list-item-title class="headline">{{audition.title_audition}}</v-list-item-title>
                             <v-list-item-subtitle>by {{audition.related_user.name}}</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-img :src="audition.banner_audition" height="194"></v-img>
                     <v-card-text>
                         <strong>Description</strong>: {{audition.description_audition}}<br/>
-                        <v-divider></v-divider>
-                        <strong>Script:</strong> {{audition.script_text_audition}}<br/>
                         <v-divider></v-divider>
                         <strong>Date of audition:</strong> {{audition.created_at.substr(0,10)}} to {{audition.end_date_available}}
                     </v-card-text>
                     <v-card-actions>
-                        <router-link :to="{ name: 'audition.person', params: { id_audition: audition.id }}">
+                        <router-link :to="{ name: 'audition.person', params: { id_audition: audition.id, id_project: $route.params.id_project }}">
                                 READ
                         </router-link>
                         <v-spacer></v-spacer>
