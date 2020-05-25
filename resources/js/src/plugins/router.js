@@ -10,17 +10,17 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {
-            path: '/',
+            path: '/user/:id_user',
             name: 'dashboard.proyect',
             component: DashboardProyectComponent
         },
         {
-            path: '/add-project',
+            path: '/add-project/user/:id_user',
             name: 'add.Proyect',
             component: ProyectComponent
         },
         {
-            path: '/:id_project/dashboard-casting',
+            path: '/:id_user/user/:id_project/dashboard-casting',
             name: 'dashboard.casting',
             component: AuditionDashboard
         },
@@ -30,7 +30,7 @@ export default new Router({
             component: AuditionComponent
         },
         {
-            path: '/project/:id_project/audition/:id_audition/audition-person',
+            path: '/project/:id_project/user/:id_user/audition-person',
             name: 'audition.person',
             component: AuditionPersonComponent
         },

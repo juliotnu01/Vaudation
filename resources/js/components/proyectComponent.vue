@@ -1,226 +1,329 @@
 <template>
     <v-app>
-        <v-stepper v-model="e1">
+        <v-stepper v-model="var_step">
             <v-stepper-header>
-                <v-stepper-step editable :complete="e1 > 1" step="1">Step 1 Project Name</v-stepper-step>
+                <v-stepper-step editable :complete="var_step > 1" step="1">Step 1 Project Name</v-stepper-step>
                 <v-divider></v-divider>
-                <v-stepper-step editable :complete="e1 > 2" step="2">step 2 Add Character and Description </v-stepper-step>
+                <v-stepper-step editable :complete="var_step > 2" step="2">step 2 Add Character and Description </v-stepper-step>
                 <v-divider></v-divider>
-                <v-stepper-step editable :complete="e1 > 3" step="3">step 3 Add Questions</v-stepper-step>
+                <v-stepper-step editable :complete="var_step > 3" step="3">step 3 Add Questions / Comments</v-stepper-step>
                 <v-divider></v-divider>
-                <v-stepper-step editable :complete="e1 > 4" step="4">step 4 Add Audition</v-stepper-step>
+                <v-stepper-step editable :complete="var_step > 4" step="4">step 4 Add Scene</v-stepper-step>
                 <v-divider></v-divider>
-                <v-stepper-step editable :complete="e1 > 5" step="5">step 5 Add Scene</v-stepper-step>
-                <v-divider></v-divider>
-                <v-stepper-step editable step="6">step 6 Send Invitations </v-stepper-step>
+                <v-stepper-step editable step="5">step 5 Send Invitations </v-stepper-step>
             </v-stepper-header>
             <v-stepper-items>
                 <v-stepper-content step="1">
-                    <v-card class="mb-12 mx-auto elevation-2" height="400px" max-width="344">
-                        <v-container>
-                            <v-layout row wrap>
-                                <v-flex xs12 sm12 md12 class="m-2">
-                                    <v-text-field label="Project Name" v-model="var_project_name"></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12 class="m-3">
-                                    <h3>Project Name: </h3>{{var_project_name}}
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card>
-                    <v-btn color="primary" @click="e1 = 2">
-                        Continue
-                    </v-btn>
-                    <v-btn text>Cancel</v-btn>
+                    <v-row>
+                        <v-col>
+                            <v-card class="mb-12 mx-auto elevation-2" height="400px" max-width="344">
+                                <v-container>
+                                    <v-layout row wrap>
+                                        <v-flex xs12 sm12 md12 class="m-2">
+                                            <v-text-field label="Project Name" v-model="var_project.name_project"></v-text-field>
+                                        </v-flex>
+                                        <v-flex xs12 sm12 md12 class="m-3">
+                                            <h3>Project Name: </h3>{{var_project.name_project}}
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="text-right">
+                            <v-btn color="primary" @click="var_step = 2">
+                                Continue
+                            </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-stepper-content>
                 <v-stepper-content step="2">
-                    <v-card class="mb-12 mx-auto elevation-2" height="400px" max-width="500" style="overflow-y: scroll; max-height: 400px;">
-                        <v-container>
-                            <v-layout row wrap class="m-2">
-                                <v-flex xs12 sm12 md12>
-                                    <v-text-field label="Character Name" v-model="var_project_character_name"></v-text-field>
-                                </v-flex>
-                                <v-spacer></v-spacer>
-                                <v-flex xs12 sm12 md12>
-                                    <v-textarea color="black" label="Character Description" v-model="var_project_character_description"></v-textarea>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <v-btn color="success btn bg-warning" block @click="addCharacterItems">Add</v-btn>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Character Name</th>
-                                                <th scope="col">Character description</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="character in characterItems" :key="character.id">
-                                                <td>{{character.name}}</td>
-                                                <td style="word-wrap: break-word; width: 600px;">{{character.description}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card>
-                    <v-btn color="primary" @click="e1 = 3">
-                        Continue
-                    </v-btn>
-                    <v-btn text>Cancel</v-btn>
+                    <v-row justify="center">
+                        <v-col cols="12" xs="12" sm="12" md="4" class="text-center">
+                            <v-card>
+                                <img src="https://img.icons8.com/wired/128/000000/movie-projector.png">
+                                <v-card-title> {{var_project.name_project}}</v-card-title>
+                                </img>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12" xs="12" sm="12" md="4">
+                            <v-card>
+                                <v-card-title> Character</v-card-title>
+                                <v-container>
+                                    <v-row justify="center">
+                                        <v-col cols="12" xs="12" sm="12" md="5">
+                                            <img src="https://img.icons8.com/wired/128/000000/user.png" />
+                                        </v-col>
+                                        <v-col cols="12" xs="12" sm="12" md="5">
+                                            <img src="https://img.icons8.com/pastel-glyph/128/000000/user-female--v1.png" />
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <v-text-field label="Character Name" v-model="var_name_character"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <v-textarea color="black" label="Character Description" v-model="var_description_character"></v-textarea>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="text-right">
+                            <v-btn color="primary" @click="addCharacter">
+                                Continue
+                            </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-stepper-content>
                 <v-stepper-content step="3">
-                    <v-card class="mb-12 mx-auto elevation-2" height="600px" max-width="500" style="overflow-y: scroll;">
-                        <v-container>
-                            <v-layout row wrap class="m-2">
-                                <v-flex xs12 sm12 md12>
-                                    <v-text-field label="Questions ProJect" v-model="var_question_project"></v-text-field>
-                                </v-flex>
-                                <v-spacer></v-spacer>
-                                <v-flex xs12 sm12 md12>
-                                    <v-btn color="success btn bg-info" block @click="addQuestions">Add</v-btn>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Questions Project</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="question in questionsItems" :key="question.id">
-                                                <td>{{question.question}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card>
-                    <v-btn color="primary" @click="addProject">
-                        Continue
-                    </v-btn>
-                    <v-btn text>Cancel</v-btn>
+                    <v-row justify="center">
+                        <v-col cols="12" xs="12" sm="12" md="4">
+                            <v-card>
+                                <v-container>
+                                    <v-row justify="center">
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <img src="https://img.icons8.com/ios/128/000000/ask-question.png" />
+                                        </v-col>
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <v-text-field v-model="query" label="Questions Character"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <v-btn color="success btn bg-info" block @click="addQuerys()">Add</v-btn>
+                                        </v-col>
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Questions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(q, i) in questions" :key="i">
+                                                        <td>{{q.question}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="text-right">
+                            <v-btn color="primary" @click="addQuestions">
+                                Continue
+                            </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-stepper-content>
                 <v-stepper-content step="4">
-                    <v-card class="mb-12 mx-auto elevation-2" max-width="600">
-                        <v-container>
-                            <v-layout row wrap>
-                                <v-layout row wrap class="m-3">
-                                    <v-flex xs12 sm12 md12>
-                                        <v-text-field label="Title Audition" v-model="var_title_audition"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12 sm12 md12>
-                                        <v-textarea color="black" label="Character Description" v-model="var_description_audition"></v-textarea>
-                                    </v-flex>
-                                    <v-flex xs12 sm12 md12 class="mx-auto elevation-2" v-if="imgF === '' ? false : true">
-                                        <img :src="imgF" width="600" height="250" />
-                                    </v-flex>
-                                    <v-flex xs12 sm12 md12>
-                                        <p>Final Date Available for audition</p>
-                                        <v-row justify="center">
-                                            <v-date-picker v-model="picker" year-icon="mdi-calendar-blank" prev-icon="mdi-skip-previous" next-icon="mdi-skip-next"></v-date-picker>
-                                        </v-row>
-                                    </v-flex>
-                                    <v-flex xs12 sm12 md12>
-                                        <v-btn color="warning" @click="SaveAudition" block>
-                                            Add Audiiton
-                                        </v-btn>
-                                    </v-flex>
-                                    <v-flex xs12 sm12 md12>
-                                        <v-data-table :headers="headers" :items="data_auditions" :items-per-page="5" class="elevation-1">
-                                            <template v-slot:items="props">
-                                                <td class="text-center">
-                                                    {{ props.item.title_audition }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ props.item.description_audition }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ props.item.end_date_available }}
-                                                </td>
-                                            </template>
-                                        </v-data-table>
-                                    </v-flex>
-                                </v-layout>
-                            </v-layout>
-                        </v-container>
-                    </v-card>
-                    <v-btn color="primary" @click="e1 = 5">
-                        Continue
-                    </v-btn>
-                    <v-btn text>Cancel</v-btn>
+                    <v-row>
+                        <v-col cols="12" xs="12" sm="12" md="12">
+                            <v-card>
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="12" xs="12" sm="12" md="12" class="text-center">
+                                            <h1>Script File (PDF)</h1>
+                                        </v-col>
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" ref="customFile" @change="PDFcharge($event)" />
+                                                <label class="custom-file-label" for="customFile">Choose script file</label>
+                                            </div>
+                                        </v-col>
+                                        <v-col cols="12" xs="12" sm="12" md="12">
+                                            <pdf :src="pdfName"></pdf>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="text-right">
+                            <v-btn color="primary" @click=" var_step = 5">
+                                Continue
+                            </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-stepper-content>
                 <v-stepper-content step="5">
-                    <v-card class="mb-12 mx-auto elevation-2" max-width="600">
-                        <v-container>
-                            <v-layout row wrap class="m-3">
-                                <v-flex xs12 sm12 md12>
-                                    <v-select :items="data_auditions" v-model="var_audition_selected" label="Select Audition" return-object item-text="title_audition"></v-select>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <v-select :items="data_character" v-model="var_character_selected" label="Select Character" return-object item-text="character_name"></v-select>
-                                    Description Character: {{var_character_selected.description_character}}
-                                </v-flex>
-                                <v-flex xs12 sm12 md12 class="m-3">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" ref="customFile" @change="PDFcharge" />
-                                        <label class="custom-file-label" for="customFile">Choose script file</label>
+                    <v-row justify="center">
+                        <v-col cols="6">
+                            <v-card class="mx-auto" max-width="400">
+                                <v-card-title>
+                                    <img src="https://img.icons8.com/wired/64/000000/movie-projector.png">
+                                    <span class="title ml-5 font-weight-light">{{var_project.name_project}}</span>
+                                </v-card-title>
+                                <v-card-text>
+                                    <v-textarea color="black" label="Note" v-model="invitation.note" background-color="light-blue"></v-textarea>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-list-item class="grow">
+                                        <v-row align="center" justify="end">
+                                            <v-btn :color="show === true ? 'info': 'default'" text @click.prevent="show = !show">
+                                                <v-icon class="mr-1">mdi-share-variant</v-icon>
+                                            </v-btn>
+                                            <span class="subheading">{{invitations.length}}</span>
+                                        </v-row>
+                                    </v-list-item>
+                                </v-card-actions>
+                                <v-expand-transition>
+                                    <div v-show="show">
+                                        <v-divider></v-divider>
+                                        <v-card-text>
+                                            <v-row justify="center">
+                                                <v-col cols="12" xs="12" sm="12" md="12">
+                                                    <v-text-field v-model="invitation.name" label="Name"></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" xs="12" sm="12" md="12">
+                                                    <v-text-field v-model="invitation.email" label="Email"></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" xs="12" sm="12" md="12">
+                                                    <v-btn color="info" text block @click.prevent="addInvitation"> Add invitation</v-btn>
+                                                </v-col>
+                                                <v-col cols="12" xs="12" sm="12" md="12">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">Email</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="(invitation, i) in invitations" :key="i">
+                                                                <td>{{invitation.name}}</td>
+                                                                <td>{{invitation.email}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </v-col>
+                                            </v-row>
+                                        </v-card-text>
                                     </div>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12 class="m-3 elevation-2" v-if="pdfName === '' ? false : true">
-                                    <pdf :src="pdfName"></pdf>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <v-btn color="primary" @click="addScene" block>
-                                        Add Scene
-                                    </v-btn>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12 class="m-3">
-                                    <v-data-table :headers="headers_scene" :items="data_scene" :items-per-page="5" class="elevation-1">
-                                        <template v-slot:item.script_attached_audition="{ item }">
-                                            <img src="https://img.icons8.com/metro/26/000000/pdf-2.png" />
-                                            <a :href="item.script_attached_audition">PDF attachmend</a>
-                                        </template>
-                                    </v-data-table>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card>
-                    <v-btn color="primary" @click="e1 = 6">
-                        Continue
-                    </v-btn>
-                    <v-btn text>Cancel</v-btn>
-                </v-stepper-content>
-                <v-stepper-content step="6">
-                    <v-card class=" mx-auto elevation-2 " max-width="600">
-                        <v-container>
-                            <v-layout row wrap class="m-3">
-                                <v-flex xs12 sm12 md12>
-                                    <v-text-field label="Name" v-model="var_name_invitations"></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <v-text-field type="email" label="Email" v-model="var_email_invitations"></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <v-btn color="success" @click="addInvitation" block>Add Invitation</v-btn>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <v-data-table :headers="headers_invitations" :items="data_invitations" :items-per-page="5" class="elevation-1">
-                                    </v-data-table>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card>
-                    <v-btn color="primary" @click="addFinal">
-                        Finish
-                    </v-btn>
-                    <v-btn text>Cancel</v-btn>
+                                </v-expand-transition>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="text-right">
+                            <v-btn color="primary" @click="addProject ">
+                                Continue
+                            </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-stepper-content>
             </v-stepper-items>
         </v-stepper>
+        <v-dialog v-model="dialog_finish" persistent max-width="700px" transition="dialog-transition">
+            <v-card>
+                <v-toolbar>
+                    <v-row aling="end" justify="end">
+                        <v-toolbar-items>
+                            <v-card-title primary-title>
+                                Finalize
+                            </v-card-title>
+                        </v-toolbar-items>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                            <v-btn icon @click="dialog_finish = false">
+                                <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                        </v-toolbar-items>
+                    </v-row>
+                </v-toolbar>
+                <v-card-actions>
+                    <v-row>
+                        <v-col cols="12" xs="12" sm="12" md="12">
+                            <v-btn color="success" block @click="AddAnotherCharacter">Add another character to project: {{ var_project.name_project }}</v-btn>
+                        </v-col>
+                        <v-col cols="12" xs="12" sm="12" md="12">
+                            <v-btn color="info" block @click="anotherCharacterToAnotherProject">Add another character to another project</v-btn>
+                        </v-col>
+                        <v-col cols="12" xs="12" sm="12" md="12">
+                            <v-btn color="warning" block @click="addNewProject">Create a new project</v-btn>
+                        </v-col>
+                        <v-col cols="12" xs="12" sm="12" md="12">
+                            <v-btn color="error" block @click="reviewSubmissions">Review submissions</v-btn>
+                        </v-col>
+                        <v-col cols="12" xs="12" sm="12" md="12">
+                            <v-btn color="default" block>Leave vauditions</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialog_another_character_to_another_project" width="800">
+            <v-card>
+                <v-card-title class="headline grey lighten-2" primary-title>
+                    Add another character to another project
+                </v-card-title>
+                <v-card-text>
+                    <v-select :items="var_projects_to_redirect" label="Select Project" return-object item-text="project_name" v-model="project_selected">
+                    </v-select>
+                    <v-btn color="info" @click="goToProject(project_selected.id)">Go to Project:{{ project_selected.project_name}} </v-btn>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" text @click="dialog_another_character_to_another_project = false">
+                        Cancel
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialog_review" width="900">
+            <v-card>
+                <v-card-title class="headline grey lighten-2" primary-title>
+                    Review submissions
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-card>
+                            <v-row>
+                                <v-col cols="12" sm="12" xs="12" md="12" >
+                                    <h4> Project: {{var_project.name_project}}</h4>
+                                </v-col>
+                                <v-col cols="12" xs="12" sm="12" md="6" v-for="(character, c) in var_project.character" :key="c">
+                                    <div>
+                                        Character
+                                    <p> -Name character: {{character.name}}<br/>
+                                        -Descripcion character: {{character.description}}
+                                    </p>
+                                    </div>
+                                    <div>
+                                        Questions
+                                        <p v-for="q in character.questions">
+                                            - {{q.question}}
+                                        </p><br />
+                                    </div>
+                                    <div>
+                                        Invitations
+                                        <p v-for="i in invitations">
+                                             - name: {{i.name }}<br/>
+                                             - email: {{i.email}}
+                                        </p><br />
+                                    </div>
+                                </v-col>
+                            </v-row>
+                        </v-card>
+                    </v-container>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" text @click="dialog_review = false">
+                        Cancel
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        </div>
     </v-app>
 </template>
 <script>
@@ -231,207 +334,150 @@ export default {
     },
     data() {
         return {
-            var_title_audition: "",
-            var_description_audition: "",
-            var_script_text_audition: "",
-            var_banner_audition: "",
-            var_attachment_audition: "",
-            e1: 1,
-            var_project_name: '',
-            var_project_character_name: '',
-            var_project_character_description: '',
-            characterItems: [],
-            questionsItems: [],
-            var_question_project: '',
-            pdfName: "",
-            imgF: "",
-            picker: new Date().toISOString().substr(0, 10),
-            project_id: '',
-            headers: [
-                { text: "Title Audition", value: "title_audition" },
-                { text: "Description Audition", value: "description_audition" },
-                { text: "End Date Available Audition", value: "end_date_available" },
-            ],
-            headers_scene: [
-                { text: "Character Name", value: "character_scene" },
-                { text: "Character Description", value: "descripction_character_scene" },
-                { text: "Attachmend Script (PDF)", value: "script_attached_audition" },
-                { text: "Title Audition", value: "audition.title_audition" },
-
-            ],
-            headers_invitations: [
-                { text: "Name", value: "name" },
-                { text: "email", value: "email" },
-            ],
-            data_auditions: [],
-            var_audition_selected: [],
-            var_description_character_scene: '',
-            var_attachment_audition: '',
-            audition_id: '',
-            data_character: [],
-            var_character_selected: '',
-            data_scene: [],
-            data_invitations: [],
-            var_name_invitations: '',
-            var_email_invitations: '',
+            dialog_review: false,
+            project_selected: '',
+            var_projects_to_redirect: [],
+            dialog_another_character_to_another_project: false,
+            dialog_finish: false,
+            var_step: 1,
+            var_name_character: '',
+            var_description_character: '',
+            query: '',
+            questions: [],
+            invitations: [],
+            invitation: {
+                name: '',
+                email: '',
+                note: '',
+            },
+            var_project: {
+                id: '',
+                name_project: '',
+                character: [],
+            },
+            pdfName: '',
+            show: false,
         }
     },
     methods: {
-        async addFinal() {
-            var t = this
-            this.$swal({
-                title: 'Do you want another Vaudition?',
-                text: "you want to add another vaudition or you want to end and save the vaudition",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, I want to add another vaudition!',
-                cancelButtonText: 'No, save and finish',
-            }).then(async(result) => {
-                if (result.value) {
-                    t.e1 = 2
-                }
-                if (result.dismiss) {
-
-                    const URL = `send-invitation`
-                    try {
-                        let { data } = await axios.post(URL, { invitations: this.data_invitations })
-                        this.$router.push({ name: 'dashboard.proyect' });
-                    } catch (e) {
-                        console.log(e);
-                    }
-                }
-            })
-
-        },
-        addInvitation() {
-
-            this.data_invitations.push({ name: this.var_name_invitations, email: this.var_email_invitations })
-        },
-        async getScene() {
-            const URL = `get-scene`;
-            try {
-                let { data } = await axios(URL);
-                this.data_scene = data;
-            } catch (e) {
-                console.log(e);
-            }
-        },
-        async getCharanter(id) {
-            const URL = `${this.project_id}/get-character`
-            try {
-                let { data } = await axios(URL)
-                this.data_character = data
-            } catch (e) {
-                console.log(e);
-            }
-        },
-        async addScene() {
-            const URL = `save-scene`;
-            var script_attached_audition,
-                id_audition,
-                character_scene,
-                descripction_character_scene,
-                dialogue_scene;
-            var scene = new FormData();
-            scene.append("script_attached_audition", this.var_attachment_audition);
-            scene.append("id_audition", this.var_audition_selected.id);
-            scene.append("character_scene", this.var_character_selected.character_name);
-            scene.append("descripction_character_scene", this.var_character_selected.description_character);
-
-            try {
-                let { data } = await axios.post(URL, scene, {
-                    headers: { "Content-type": "multipart/form-data" }
-                });
-                this.getScene();
-                this.dialog_scene = false;
-                this.el = 6
-            } catch (e) {
-                console.log(e);
-            }
-        },
         PDFcharge(e) {
-            this.var_attachment_audition = e.target.files[0];
+            var character = this.var_project.character.findIndex(item => item.name === this.var_name_character)
+            this.var_project.character[character].script = e.target.files[0];
             this.pdfName = pdf.createLoadingTask(
                 URL.createObjectURL(e.target.files[0])
             );
         },
-        async getAudition() {
-            const URL = `${this.project_id}/get-audition`;
-            try {
-                let { data } = await axios(URL);
-                this.data_auditions = data;
-            } catch (e) {
-                console.log(e);
-            }
+        addQuerys() {
+            this.questions.push({ question: this.query })
+            this.query = ''
         },
         addQuestions() {
-            var exits = this.questionsItems.find(item => item.question === this.var_question_project)
-            if (!exits) {
+            this.var_step = 4
+            var character = this.var_project.character.findIndex(item => item.name === this.var_name_character)
+            this.var_project.character[character].questions = this.questions
 
-                this.questionsItems.push({ question: this.var_question_project })
-                this.var_question_project = ''
-            }
         },
-        addCharacterItems() {
-            var exits = this.characterItems.find(item => item.name === this.var_project_character_name)
-            if (!exits) {
-                this.characterItems.push({ name: this.var_project_character_name, description: this.var_project_character_description })
-                this.var_project_character_name = ''
-                this.var_project_character_description = ''
-            }
+        deleteQuestion(item) {
+            let index = this.var_project.questions.findIndex(item => item.question === item.question)
+            this.var_project.questions.splice()
+        },
+        addInvitation() {
+            var character = this.var_project.character.findIndex(item => item.name === this.var_name_character)
+            this.var_project.character[character].invitations.push({ name: this.invitation.name, email: this.invitation.email })
+            this.invitations.push({ name: this.invitation.name, email: this.invitation.email })
+            this.invitation.name = ''
+            this.invitation.email = ''
+
         },
         async addProject() {
-            const URL = `save-project`
-            try {
-                let { data } = await axios.post(URL, {
-                    project_name: this.var_project_name,
-                    characters: this.characterItems,
-                    questions: this.questionsItems
-                })
-                this.project_id = data.id
-                this.e1 = 4
-                this.getCharanter();
-            } catch (e) {
-                console.log(e);
-            }
+            // const URL = `save-project`
+
+            // var form = new FormData()
+            // form.append('project', JSON.stringify(this.var_project));
+            // form.append('script_file', this.var_project.script);
+            // try {
+            //     // let { data } = await axios.post(URL, form, {headers:{ "Content-Type": "multipart/form-data"}})
+            //     // this.var_project.id = data.id
+            this.dialog_finish = true
+            //     // this.limpiar();
+            //     this.var_step = 1
+            // } catch (e) {
+            //     console.log(e);
+            // }
         },
         limpiar() {
-            this.var_project_name = ''
-            this.var_project_character_name = ''
-            this.var_project_character_description = ''
-            this.var_question_project = ''
-            this.project_id = ''
+            this.query = ''
+            this.invitation = {
+                name: '',
+                email: '',
+                note: '',
+            }
+            this.var_project = {
+                id: '',
+                name_project: '',
+                character: [],
+                invitations: []
+            }
+            this.pdfName = ''
         },
-        async SaveAudition() {
-            const URL = `save-audition`;
-            var data = new FormData();
-            data.append("title_audition", this.var_title_audition);
-            data.append("description_audition", this.var_description_audition);
-            data.append("banner_audition", this.var_banner_audition);
-            data.append("id_project", this.project_id);
-            data.append("picker", this.picker);
+        addCharacter() {
+            this.var_step = 3
+            this.var_project.character.push({
+                name: this.var_name_character,
+                description: this.var_description_character,
+                script: '',
+                questions: [],
+                invitations: []
 
+            })
+        },
+        AddAnotherCharacter() {
+
+            this.var_step = 2
+            this.var_name_character = ''
+            this.var_description_character = ''
+            this.questions = []
+            this.invitations = []
+            this.dialog_finish = false
+            this.$refs.customFile.value = '';
+            this.pdfName = ''
+
+        },
+        anotherCharacterToAnotherProject() {
+            this.getProjects()
+            this.dialog_another_character_to_another_project = true
+        },
+        async getProjects() {
+            const URL = `get-project/user/${this.$route.params.id_user}`
             try {
-                let audition = await axios.post(URL, data, {
-                    headers: { "Content-type": "multipart/form-data" }
-                });
-                this.getAudition();
+                let { data } = await axios(URL)
+                this.var_projects_to_redirect = data.project_related
+                console.log({ proyectos: data })
             } catch (e) {
                 console.log(e);
             }
         },
-        PDFcharge(e) {
-            this.var_attachment_audition = e.target.files[0];
-            this.pdfName = pdf.createLoadingTask(
-                URL.createObjectURL(e.target.files[0])
-            );
+        goToProject(id_project) {
+            window.location = `/home#/${this.$route.params.id_user}/user/${id_project}/dashboard-casting `
         },
-        IMGcharge(e) {
-            this.var_banner_audition = e.target.files[0];
-            this.imgF = URL.createObjectURL(e.target.files[0]);
+        addNewProject() {
+            this.var_step = 1
+            this.var_name_character = ''
+            this.var_description_character = ''
+            this.questions = []
+            this.invitations = []
+            this.dialog_finish = false
+            this.$refs.customFile.value = ''
+            this.pdfName = ''
+            this.var_project = {
+                id: '',
+                name_project: '',
+                character: [],
+            }
         },
+        reviewSubmissions() {
+            this.dialog_review = true
+        }
     }
 }
 

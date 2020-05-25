@@ -10,6 +10,15 @@ use DB;
 
 class SceneController extends Controller
 {
+    public function AuditionSpecificWithScenes(Audition $audition, $id_audition)
+    {
+        try {
+            return $audition->where('id', $id_audition)->with('relatedScenes')->first();
+        } catch (Exception $e) {
+            throw new Exception($e, 1);
+            
+        }
+    }
     public function index(Scene $scene)
     {
         try {

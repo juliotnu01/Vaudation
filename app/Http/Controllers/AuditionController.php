@@ -7,13 +7,14 @@ use App\Models\{Audition,Proyect};
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use DB;
+use App\User;
 
 class AuditionController extends Controller
 {
-    public function index(Audition $audition, $id_proyect)
+    public function index(Audition $audition)
     {
         try {
-            return $audition->where('id_proyect', $id_proyect)->with('relatedUser')->get();
+            return User::all();
         } catch (Exception $e) {
             throw new Exception($e, 1);
             
@@ -23,7 +24,9 @@ class AuditionController extends Controller
     {
         return $project->with(['relatedCasting' => function($q) use ($id_audition){
              return  $q->where('id', $id_audition)->first();
-        }, 'relatedCasting.relatedScenes' , 'relatedQuestionProject', 'relatedQuestionProject.relatedAnswer' => function($q){
+        }, 'relatedCasting.relatedScenes' , 'relatedCasting.relatedScenes.relatedAuditionScene' => function($q){
+            return $q->where('created_by', Auth::id())->orderBy('id', 'desc')->first();
+        }, 'relatedQuestionProject', 'relatedQuestionProject.relatedAnswer' => function($q){
             return $q->where('user_id', Auth::id());
         }])->where('id', $id_project)->first();
     }

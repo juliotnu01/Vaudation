@@ -3,18 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Proyect extends Model
 {
     protected $table = 'proyect';
     protected $guardad = [];
 
-    public function relatedCasting()
+    public function userRelated()
     {
-        return $this->hasMany(Audition::class, 'id_proyect');
+        return $this->belongsTo(User::class, 'user_id');
     }
-    public function relatedQuestionProject($value='')
+     public function CharacterRelated()
     {
-        return $this->hasMany(QuestionProyect::class, 'id_proyect');
+        return $this->hasMany(Character::class, 'id_proyect');
     }
+
+  
 }

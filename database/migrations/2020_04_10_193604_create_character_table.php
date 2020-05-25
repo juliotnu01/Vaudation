@@ -17,6 +17,7 @@ class CreateCharacterTable extends Migration
             $table->id();
             $table->longText('character_name')->nullable();
             $table->longText('description_character')->nullable();
+            $table->longText('script_attached_audition')->nullable();
             $table->bigInteger('id_proyect')->unsigned()->nullable();
             $table->foreign('id_proyect')->references('id')->on('proyect');
             $table->timestamps();

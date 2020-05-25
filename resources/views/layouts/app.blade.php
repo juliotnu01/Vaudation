@@ -43,12 +43,12 @@
                                     Project
                                   </button>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <router-link to="/">
+                                    <router-link :to="{name:'dashboard.proyect', params: { id_user: {{Auth::id()}} } }">
                                         <a href=""  class="dropdown-item">
                                             Dashboard Project
                                         </a>
                                     </router-link> 
-                                     <router-link :to="{name:'add.Proyect'}">
+                                     <router-link :to="{name:'add.Proyect', params: { id_user: {{Auth::id()}} } }">
                                         <a href=""  class="dropdown-item">
                                             Add Project
                                         </a>

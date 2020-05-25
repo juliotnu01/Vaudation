@@ -12,85 +12,92 @@
                                 <h4> Casting Description :</h4>{{audition.description_audition}}
                             </v-flex>
                             <v-flex xs12 sm12 md12 class="m-3">
-                                <!-- <h4>Date Casting:</h4> {{audition.created_at.substr(0,10)}} to {{audition.end_date_available}} -->
+                                <h1>pdf</h1>
                             </v-flex>
-                            <v-flex xs12 sm12 md12 class="m-3">
+                            <v-flex xs12 sm12 md12 class="m-3" >
                                 <h4>Questions </h4>
-                            </v-flex>
-                            <v-flex xs12 sm12 md12 class="m-3" v-for="question in  question_proyect" :key="question.id">
-                                <p>{{question.question_proyect}}</p>
-                                <v-text-field v-if="question.related_answer.length > 0 ? false : true"  v-model="question.answer_question" ></v-text-field>
-                                <v-text-field v-else :disabled="question.related_answer.length > 0 ? true : false"  v-model="question.related_answer[0].answer_question" ></v-text-field>
+                                <!-- <p>{{question.question_proyect}}</p>
+                                <v-text-field v-if="question.related_answer.length > 0 ? false : true" v-model="question.answer_question"></v-text-field>
+                                <v-text-field v-else :disabled="question.related_answer.length > 0 ? true : false" v-model="question.related_answer[0].answer_question"></v-text-field> -->
                             </v-flex>
                             <v-flex xs12 sm12 md12>
-                              <v-btn color="success" @click="addAnswer" >Save Answer</v-btn>
+                                <v-btn color="success" @click="addAnswer">Save Answer</v-btn>
                             </v-flex>
                         </v-layout>
                     </v-container>
                 </v-flex>
-           
-                <v-flex xs12 sm12 md4 class="justify-center m-3" v-for="scene in audition.related_scenes" :key="scene.id">
-                    <v-card class="mx-auto" max-width="1050" tile>
-                        <v-container>
-                            <v-layout row wrap class="m-1 text-sm-center">
-                                <v-flex xs12 sm12 md12>
-                                    <h4>Character Scene </h4>
-                                    <p>{{scene.character_scene}}</p>
-                                </v-flex>
-                                <v-flex xs12 sm12 md12>
-                                    <h4>Description Character Scene </h4>
-                                    <p>{{scene.descripction_character_scene}}</p>
-                                    <a :href="scene.script_attached_audition"> PDF Script Attachmend</a>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                        <v-card-actions>
-                            <v-btn text @click="dialog = true">Add Audition</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                    <v-timeline dense>
-                        <v-timeline-item>
-                            <span slot="opposite">Tus eu perfecto</span>
+                <v-flex xs12 sm12 md4 class="justify-center m-3">
+                   <v-timeline dense>
+                        <v-timeline-item >
                             <v-card class="elevation-2">
-                                <video width="320" height="240" controls>
-                                    <source src="http://localhost:8000/videos/grabacion1586640591055.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
+                                <v-container>
+                                    <v-layout row wrap>
+                                        <v-flex xs12 sm12 md6 class="ml-3" >
+                                            <v-container>
+                                                <v-layout row wrap>
+                                                    <v-flex xs12 sm12 md3>
+                                                        <!-- <v-icon>{{vaudition.red_selected}}</v-icon> -->
+                                                    </v-flex>
+                                                    <v-flex xs12 sm12 md8>
+                                                        <a href="#" target="_blanck">Link Vaudition</a>
+                                                    </v-flex>
+                                                </v-layout>
+                                            </v-container>
+                                        </v-flex>
+                                        <v-flex xs12 sm12 md12 >
+                                            <video width="270" height="200" controls>
+                                                <source src="#" type="video/mp4">
+                                            </video>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
                             </v-card>
                         </v-timeline-item>
                     </v-timeline>
                 </v-flex>
-            </v-layout
->
+            </v-layout>
         </v-container>
         <v-dialog v-model="dialog" width="500">
             <v-card>
-                <v-card-title class="headline grey lighten-2" primary-title>
-                    Privacy Policy
+                <v-card-title class="headline blue lighten-2" primary-title>
+                    Add Vaudition
                 </v-card-title>
                 <v-card-text>
-                    <div class="col-6">
-                        <video id="video" width="400"></video>
-                        <button class="btn btn-primary" @click="grabarVideo">
-                            Grabar
-                        </button>
-                        <button class="btn btn-secondary" @click="detenerGrabacion">
-                            Parar
-                        </button>
-                    </div>
+                    <v-container>
+                        <v-layout row wrap>
+                            <v-flex xs12 sm12 md12>
+                                <video class="elevation-4" id="video" width="450"></video>
+                                <button class="btn btn-primary" @click="grabarVideo">
+                                    Record vaudition
+                                </button>
+                                <button class="btn btn-danger" @click="detenerGrabacion">
+                                    Stop / Finish vaudition
+                                </button>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12 class="m-3">
+                                <v-select v-model="var_red_selected" :items="items_red_social" label="Select Red Social" return-object item-text="name" outlined>
+                                    <template v-slot:item="{item}">
+                                        <v-icon>{{item.icon}}</v-icon>
+                                        <div> {{item.name}}</div>
+                                    </template>
+                                </v-select>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12>
+                                <v-text-field label="Link to vaudition red social" v-model="var_url_audition"></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" class="ml-3" @click="dialog = false">
-                        I accept
-                    </v-btn>
+                    <v-btn color="primary" block @click.prevent="addSceneAuditionLink">Save link and finish vaudition</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
     </v-app>
 </template>
 <script>
+import { mdiYoutube, mdiVimeo } from '@mdi/js';
 export default {
     data() {
         return {
@@ -99,6 +106,13 @@ export default {
             array_video: [],
             mediaRecorder: null,
             question_proyect: [],
+            var_url_audition: '',
+            items_red_social: [
+                { name: 'Youtube', icon: mdiYoutube, value: 1 },
+                { name: 'Vimeo', icon: mdiVimeo, value: 2 }
+            ],
+            scene_id: '',
+            var_red_selected: '',
         }
     },
     watch: {
@@ -113,29 +127,48 @@ export default {
         this.getAuditionSpecific(this.$route.params.id_audition);
     },
     methods: {
-        async addAnswer(){
+        async addSceneAudition(scene, url = false) {
+            this.dialog = true
+            this.scene_id = scene.id
+
+        },
+        async addSceneAuditionLink() {
+            var url_audition_red, scene_id, red_selected;
+
+            url_audition_red = this.var_url_audition
+            scene_id = this.scene_id
+            red_selected = this.var_red_selected.icon
+
+            try {
+                const URL = `add-audition-scene`
+                let { data } = await axios.post(URL, { scene_id, url_audition_red, red_selected })
+                this.getAuditionSpecific(this.$route.params.id_audition);
+                this.var_red_selected = ''
+                this.var_url_audition = ''
+                this.dialog = false
+                this.$swal.success('Save', 'Vaudition Save');
+            } catch (e) {
+                console.log(e);
+            }
+
+        },
+        async addAnswer() {
             const URL = `save-questions`
             try {
-                let {data} = axios.post(URL, {questions:this.question_proyect})
+                let { data } = axios.post(URL, { questions: this.question_proyect })
                 this.getAuditionSpecific(this.$route.params.id_audition);
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
         },
         async getAuditionSpecific(id) {
-            const URL = `project/${this.$route.params.id_project}/get-audition-specific/${id}`
+            const URL = `${this.$route.params.id_project}/project/${this.$route.params.id_user}/get-character`
             var aud
             try {
                 let { data } = await axios(URL)
-                data.related_casting.forEach(item => {
-                    aud = item
-                })
-                this.audition = aud
 
-                for (let a of data.related_question_project) {
-                    a.answer_question = ''
-                }
-                this.question_proyect = data.related_question_project
+                console.log({data})
+                
             } catch (e) {
                 console.log(e);
             }
@@ -190,6 +223,9 @@ export default {
                     blob,
                     "grabacion" + new Date().getTime() + ".mp4"
                 );
+
+                form.append("scene_id", this.scene_id);
+
                 const {
                     data
                 } = await axios
@@ -198,6 +234,8 @@ export default {
                     })
 
                     .catch(console.log("error enviando"));
+                this.getAuditionSpecific(this.$route.params.id_audition);
+                this.dialog = false
             } catch (error) {
                 console.log(error);
             }
@@ -207,7 +245,6 @@ export default {
                 if (!this.mediaRecorder) {
                     return;
                 }
-                //console.log(this.array_video);
                 this.mediaRecorder.stop();
                 this.mediaRecorder = null;
             } catch (error) {

@@ -13,4 +13,8 @@ class Scene extends Model
     {
         return $this->belongsTo(Audition::class,'id_audition');
     }
+    public function relatedAuditionScene()
+    {
+        return $this->hasMany(AuditionScene::class, 'scene_id');
+    }
 }

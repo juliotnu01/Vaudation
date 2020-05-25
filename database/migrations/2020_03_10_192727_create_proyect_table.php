@@ -16,6 +16,8 @@ class CreateProyectTable extends Migration
         Schema::create('proyect', function (Blueprint $table) {
             $table->id();
             $table->longText('project_name')->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

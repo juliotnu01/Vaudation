@@ -13,12 +13,12 @@ class CreateQuestionProyectTable extends Migration
      */
     public function up()
     {
-        Schema::create('question_proyect', function (Blueprint $table) {
+        Schema::create('question_character', function (Blueprint $table) {
             $table->id();
             $table->longText('question_proyect')->nullable();
             $table->longText('answer_question')->nullable();
-            $table->bigInteger('id_proyect')->unsigned()->nullable();
-            $table->foreign('id_proyect')->references('id')->on('proyect');
+            $table->bigInteger('character_id')->unsigned()->nullable();
+            $table->foreign('character_id')->references('id')->on('character');
             $table->timestamps();
         });
     }
