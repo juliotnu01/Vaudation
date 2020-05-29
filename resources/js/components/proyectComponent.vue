@@ -212,7 +212,7 @@
                     </v-row>
                     <v-row>
                         <v-col class="text-right">
-                            <v-btn color="primary" @click="addProject ">
+                            <v-btn color="primary" @click="dialog_finish = true ">
                                 Continue
                             </v-btn>
                         </v-col>
@@ -252,7 +252,7 @@
                             <v-btn color="error" block @click="reviewSubmissions">Review submissions</v-btn>
                         </v-col>
                         <v-col cols="12" xs="12" sm="12" md="12">
-                            <v-btn color="default" block>Leave vauditions</v-btn>
+                            <v-btn color="default" block @click="LeaveAudtionAndSave">Leave vauditions</v-btn>
                         </v-col>
                     </v-row>
                 </v-card-actions>
@@ -286,15 +286,15 @@
                     <v-container>
                         <v-card>
                             <v-row>
-                                <v-col cols="12" sm="12" xs="12" md="12" >
+                                <v-col cols="12" sm="12" xs="12" md="12">
                                     <h4> Project: {{var_project.name_project}}</h4>
                                 </v-col>
                                 <v-col cols="12" xs="12" sm="12" md="6" v-for="(character, c) in var_project.character" :key="c">
                                     <div>
                                         Character
-                                    <p> -Name character: {{character.name}}<br/>
-                                        -Descripcion character: {{character.description}}
-                                    </p>
+                                        <p> -Name character: {{character.name}}<br />
+                                            -Descripcion character: {{character.description}}
+                                        </p>
                                     </div>
                                     <div>
                                         Questions
@@ -305,8 +305,8 @@
                                     <div>
                                         Invitations
                                         <p v-for="i in invitations">
-                                             - name: {{i.name }}<br/>
-                                             - email: {{i.email}}
+                                            - name: {{i.name }}<br />
+                                            - email: {{i.email}}
                                         </p><br />
                                     </div>
                                 </v-col>
@@ -390,20 +390,28 @@ export default {
 
         },
         async addProject() {
-            // const URL = `save-project`
 
-            // var form = new FormData()
-            // form.append('project', JSON.stringify(this.var_project));
-            // form.append('script_file', this.var_project.script);
-            // try {
-            //     // let { data } = await axios.post(URL, form, {headers:{ "Content-Type": "multipart/form-data"}})
-            //     // this.var_project.id = data.id
-            this.dialog_finish = true
-            //     // this.limpiar();
-            //     this.var_step = 1
-            // } catch (e) {
-            //     console.log(e);
-            // }
+            const URL = `save-project`
+
+            this.var_project.character.forEach(async (item) => {
+
+                var form = new FormData()
+                form.append('project_name', this.var_project.name_project);
+                form.append('character', JSON.stringify(item));
+                form.append('script_file', item.script);
+                
+
+                try {
+                    let { data } = await axios.post(URL, form, { headers: { "Content-Type": "multipart/form-data" } })
+                    this.dialog_finish = true
+                    // this.limpiar();
+                    this.var_step = 1
+                } catch (e) {
+                    console.log(e);
+                }
+
+            })
+
         },
         limpiar() {
             this.query = ''
@@ -459,8 +467,10 @@ export default {
         },
         goToProject(id_project) {
             window.location = `/home#/${this.$route.params.id_user}/user/${id_project}/dashboard-casting `
+            this.addProject()
         },
         addNewProject() {
+            this.addProject()
             this.var_step = 1
             this.var_name_character = ''
             this.var_description_character = ''
@@ -477,6 +487,10 @@ export default {
         },
         reviewSubmissions() {
             this.dialog_review = true
+        },
+        LeaveAudtionAndSave() {
+            this.addProject();
+            console.log({ p: this.var_project })
         }
     }
 }

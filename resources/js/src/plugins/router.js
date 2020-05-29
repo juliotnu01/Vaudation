@@ -30,7 +30,7 @@ export default new Router({
             component: AuditionComponent
         },
         {
-            path: '/project/:id_project/user/:id_user/audition-person',
+            path: '/project/:id_project/user/:id_user/character/:id_character/audition',
             name: 'audition.person',
             component: AuditionPersonComponent
         },

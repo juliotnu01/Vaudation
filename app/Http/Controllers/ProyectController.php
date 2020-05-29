@@ -27,23 +27,39 @@ class ProyectController extends Controller
     }
     public function store(Request $request, Proyect $project, Character $character, Question_character $questions)
     {
-        // dd(json_decode($request->project));
-        $var_project = json_decode($request->project);
-
+        $var_project = json_decode($request->character);
+        // dd($project->get()->last());
+        
         try {
-            return DB::transaction(function() use ($request, $project, $var_project, $character){
-                $project->project_name = $var_project->name_project;
-                $project->user_id = Auth::id();
-                $project->save();
+            return DB::transaction(function() use ($request, $project,$var_project, $character){
+                if ($project->get()->last() === null) {
+                   
+                    $project->project_name = $request['project_name'];
+                    $project->user_id = Auth::id();
+                    $project->save();
 
-                if (is_file($request->script_file)) {
+                } else {
+
+                     if ($project->get()->last()->project_name === $request['project_name'] ) {
+                        $project->id = $project->get()->last()->id;
+                    } else {
+
+                    $project->project_name = $request['project_name'];
+                    $project->user_id = Auth::id();
+                    $project->save();
+
+                    }
+
+                }
+
+                if (is_file($request['script_file'])) {
                     $script = Storage::disk('public')->put('scripts', $request->file('script_file'));
                 }else{
                     $script = null;
                 }
 
-                $character->character_name = $var_project->character->name;
-                $character->description_character = $var_project->character->description;
+                $character->character_name = $var_project->name;
+                $character->description_character = $var_project->description;
                 $character->id_proyect = $project->id;
                 $character->script_attached_audition = asset($script);
                 $character->save();
@@ -61,9 +77,9 @@ class ProyectController extends Controller
                     $invitation->name = $value->name; 
                     $invitation->email = $value->email;  
                     $invitation->character_id = $character->id; 
-                    $invitation->note = $var_project->invitation->note;
+                    // $invitation->note = $var_project->invitation->note;
                     $invitation->save();
-                    Mail::to($value->email)->send(new InvitationsVaudition());
+                    // Mail::to($value->email)->send(new InvitationsVaudition());
                 }
 
                 return Response($project);

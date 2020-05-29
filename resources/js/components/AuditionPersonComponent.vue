@@ -6,33 +6,36 @@
                     <v-container>
                         <v-layout row wrap>
                             <v-flex xs12 sm12 md12 class="m-3">
-                                <h4> Casting Title :</h4>{{audition.title_audition}}
+                                <h4> Character name :</h4>{{character.character_name}}
                             </v-flex>
                             <v-flex xs12 sm12 md12 class="m-3">
-                                <h4> Casting Description :</h4>{{audition.description_audition}}
+                                <h4> character Description :</h4>{{character.description_character}}
                             </v-flex>
                             <v-flex xs12 sm12 md12 class="m-3">
                                 <h1>pdf</h1>
+                                <a :href="character.script_attached_audition" target="_blanck"> Attachment PDF</a>
                             </v-flex>
-                            <v-flex xs12 sm12 md12 class="m-3" >
+                            <v-flex xs12 sm12 md12 class="m-3">
                                 <h4>Questions </h4>
-                                <!-- <p>{{question.question_proyect}}</p>
-                                <v-text-field v-if="question.related_answer.length > 0 ? false : true" v-model="question.answer_question"></v-text-field>
-                                <v-text-field v-else :disabled="question.related_answer.length > 0 ? true : false" v-model="question.related_answer[0].answer_question"></v-text-field> -->
-                            </v-flex>
-                            <v-flex xs12 sm12 md12>
-                                <v-btn color="success" @click="addAnswer">Save Answer</v-btn>
+                                <v-text-field 
+                                 v-if="q.related_answer.length == 0" 
+                                 v-for="(q,i) in character.questions" 
+                                 :label="q.question_proyect" 
+                                 v-model="q.answer_question" 
+                                 :key="i"></v-text-field>
+                                <v-btn color="success" @click="addAnswer" >Save Answer</v-btn>
+                                <v-btn color="info" @click="dialog = true" >Add Vaudition</v-btn>
                             </v-flex>
                         </v-layout>
                     </v-container>
                 </v-flex>
                 <v-flex xs12 sm12 md4 class="justify-center m-3">
-                   <v-timeline dense>
-                        <v-timeline-item >
+                    <v-timeline dense>
+                        <v-timeline-item>
                             <v-card class="elevation-2">
                                 <v-container>
                                     <v-layout row wrap>
-                                        <v-flex xs12 sm12 md6 class="ml-3" >
+                                        <v-flex xs12 sm12 md6 class="ml-3">
                                             <v-container>
                                                 <v-layout row wrap>
                                                     <v-flex xs12 sm12 md3>
@@ -44,7 +47,7 @@
                                                 </v-layout>
                                             </v-container>
                                         </v-flex>
-                                        <v-flex xs12 sm12 md12 >
+                                        <v-flex xs12 sm12 md12>
                                             <video width="270" height="200" controls>
                                                 <source src="#" type="video/mp4">
                                             </video>
@@ -102,7 +105,7 @@ export default {
     data() {
         return {
             dialog: false,
-            audition: [],
+            character: [],
             array_video: [],
             mediaRecorder: null,
             question_proyect: [],
@@ -124,7 +127,7 @@ export default {
         }
     },
     mounted() {
-        this.getAuditionSpecific(this.$route.params.id_audition);
+        this.getAuditionSpecific(this.$route.params.id_character);
     },
     methods: {
         async addSceneAudition(scene, url = false) {
@@ -155,20 +158,18 @@ export default {
         async addAnswer() {
             const URL = `save-questions`
             try {
-                let { data } = axios.post(URL, { questions: this.question_proyect })
-                this.getAuditionSpecific(this.$route.params.id_audition);
+                let { data } = axios.post(URL, { questions: this.character.questions })
+                // this.getAuditionSpecific(this.$route.params.id_audition);
             } catch (e) {
                 console.log(e);
             }
         },
         async getAuditionSpecific(id) {
-            const URL = `${this.$route.params.id_project}/project/${this.$route.params.id_user}/get-character`
+            const URL = `user/${this.$route.params.id_user}/${id}/get-character-audition`
             var aud
             try {
                 let { data } = await axios(URL)
-
-                console.log({data})
-                
+                this.character = data
             } catch (e) {
                 console.log(e);
             }
@@ -201,7 +202,6 @@ export default {
         },
         add_video_data(e) {
             this.array_video.push(e.data);
-            console.log(this.array_video);
         },
         async enviar_video() {
             try {
