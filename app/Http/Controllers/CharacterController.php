@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\{Character, Proyect, Question_character};
 use Illuminate\Support\Facades\Storage;
 use DB;
+use Auth;
 
 class CharacterController extends Controller
 {
@@ -18,7 +19,9 @@ class CharacterController extends Controller
     {   
         try {
             return $character->with(['questions', 'questions.relatedAnswer' => function($q) use ($id_user) {
-                $q->where('user_id', $id_user);
+                $q->where('user_id', $id_user)->latest();
+            }, 'vauditionRelated' => function($q) {
+                $q->where('user_id', Auth::id());
             }])->where('id', $id_character)->first();
         } catch (Exception $e) {
             

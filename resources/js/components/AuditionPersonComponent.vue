@@ -31,26 +31,36 @@
                 </v-flex>
                 <v-flex xs12 sm12 md4 class="justify-center m-3">
                     <v-timeline dense>
-                        <v-timeline-item>
+                        <v-timeline-item v-for="(ch, c) in character.vaudition_related" :key="c">
                             <v-card class="elevation-2">
                                 <v-container>
                                     <v-layout row wrap>
-                                        <v-flex xs12 sm12 md6 class="ml-3">
+                                        <v-flex xs12 sm12 md6 class="ml-3" v-if="ch.url_video_redsocial">
                                             <v-container>
                                                 <v-layout row wrap>
-                                                    <v-flex xs12 sm12 md3>
-                                                        <!-- <v-icon>{{vaudition.red_selected}}</v-icon> -->
-                                                    </v-flex>
-                                                    <v-flex xs12 sm12 md8>
-                                                        <a href="#" target="_blanck">Link Vaudition</a>
+                                                    <v-flex xs12 sm12 md12>
+                                                        <a :href="ch.url_video_redsocial" target="_blanck">Link Vaudition</a>
                                                     </v-flex>
                                                 </v-layout>
                                             </v-container>
                                         </v-flex>
-                                        <v-flex xs12 sm12 md12>
+                                        <v-flex xs12 sm12 md12 v-if="ch.url_video_upload" >
                                             <video width="270" height="200" controls>
-                                                <source src="#" type="video/mp4">
+                                                <source :src="ch.url_video_upload" type="video/mp4">
                                             </video>
+                                        </v-flex>
+                                        <v-flex xs12 sm12 md12>
+                                          <h4>Question answered</h4>
+                                           <ul>
+                                               <li v-for="q in character.questions" >
+                                                   {{q.question_proyect}}
+                                                   <ul>
+                                                       <li v-for="ans in q.related_answer" >
+                                                           {{ans.answer_question}}
+                                                       </li>
+                                                   </ul>
+                                               </li>
+                                           </ul> 
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
@@ -136,16 +146,16 @@ export default {
 
         },
         async addSceneAuditionLink() {
-            var url_audition_red, scene_id, red_selected;
+            var url_audition_red,character_id, red_selected;
 
             url_audition_red = this.var_url_audition
-            scene_id = this.scene_id
-            red_selected = this.var_red_selected.icon
+            character_id = this.$route.params.id_character
+            red_selected = this.var_red_selected.name
 
             try {
                 const URL = `add-audition-scene`
-                let { data } = await axios.post(URL, { scene_id, url_audition_red, red_selected })
-                this.getAuditionSpecific(this.$route.params.id_audition);
+                let { data } = await axios.post(URL, {character_id, url_audition_red, red_selected })
+                this.getAuditionSpecific(this.$route.params.id_character);
                 this.var_red_selected = ''
                 this.var_url_audition = ''
                 this.dialog = false
@@ -224,7 +234,7 @@ export default {
                     "grabacion" + new Date().getTime() + ".mp4"
                 );
 
-                form.append("scene_id", this.scene_id);
+                form.append("character_id", this.$route.params.id_character);
 
                 const {
                     data
@@ -234,7 +244,7 @@ export default {
                     })
 
                     .catch(console.log("error enviando"));
-                this.getAuditionSpecific(this.$route.params.id_audition);
+                this.getAuditionSpecific(this.$route.params.id_character);
                 this.dialog = false
             } catch (error) {
                 console.log(error);

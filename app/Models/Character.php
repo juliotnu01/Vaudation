@@ -18,4 +18,7 @@ class Character extends Model
     {
         return $this->hasMany(Question_character::class, 'character_id');
     }
+    public function vauditionRelated(){
+        return $this->hasMany(Vaudition::class);
+    }
 }

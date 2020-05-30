@@ -13,6 +13,16 @@ use App\User;
 
 class ProyectController extends Controller
 {
+    public function project(Proyect $project)
+    {
+        try {
+            return $project->all();    
+           
+        } catch (Exception $e) {
+            throw new Exception($e, 1);
+        }
+          
+    }
     public function index(User $User, $id_user)
     {
         try {
