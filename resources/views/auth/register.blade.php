@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }} <small>(Minimum 8 characters)</small> </label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
@@ -58,6 +58,17 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="rol_user" class="col-md-4 col-form-label text-md-right">Do yo like register like to:</label>
+
+                            <div   class="col-md-6">
+                                <select class="form-control" id="rol_user" name="rol_user">
+                                  <option>Select rol</option>
+                                  <option value="1" >Director</option>
+                                  <option value="2" >Actor</option>
+                                </select>
                             </div>
                         </div>
 

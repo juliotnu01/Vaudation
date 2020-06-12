@@ -7,6 +7,7 @@ use App\Models\{Character, Proyect, Question_character};
 use Illuminate\Support\Facades\Storage;
 use DB;
 use Auth;
+use App\User;
 
 class CharacterController extends Controller
 {
@@ -17,12 +18,39 @@ class CharacterController extends Controller
 
     public function characterSpesific(Character $character , $id_user, $id_character)
     {   
+       
         try {
-            return $character->with(['questions', 'questions.relatedAnswer' => function($q) use ($id_user) {
-                $q->where('user_id', $id_user)->latest();
-            }, 'vauditionRelated' => function($q) {
-                $q->where('user_id', Auth::id());
-            }])->where('id', $id_character)->first();
+            $user = User::where('id', $id_user)->first();
+            if ($user->rol_user === 1) {
+                $result = $character->with(['vauditionRelated', 'questions'])->where('id',$id_character)->first();
+
+                foreach ($result->vauditionRelated as $key => $value) {
+                    $value->questions = Question_character::where('character_id', $value->character_id)->with(['relatedAnswer' => function($q) use ($value) {
+                        $q->where('user_id', $value->user_id);
+                    }])->get();
+
+                     $value->userPost = User::where('id', $value->user_id)->first();
+
+                }
+
+                return $result ;
+            }else {
+
+                $result = $character->with(['vauditionRelated' => function($q) use ($id_user){
+                    $q->where('user_id', $id_user);
+                }, 'questions'])->where('id',$id_character)->first();
+
+                foreach ($result->vauditionRelated as $key => $value) {
+                    $value->questions = Question_character::where('character_id', $value->character_id)->with(['relatedAnswer' => function($q) use ($value) {
+                        $q->where('user_id', $value->user_id);
+                    }])->get();
+                    
+                     $value->userPost = User::where('id', $value->user_id)->first();
+
+                }
+
+                return $result;
+            }
         } catch (Exception $e) {
             
         }

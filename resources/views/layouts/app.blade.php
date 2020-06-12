@@ -36,7 +36,7 @@
                     <!-- Left Side Of Navbar -->
 
                     <ul class="navbar-nav mr-auto">
-                        @if (Auth::check() === true)
+                        @if (Auth::check() && Auth::user()->status_user)
                         <li>
                             <div class="dropdown mr-1 small ">
                                   <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,11 +48,13 @@
                                             Dashboard Project
                                         </a>
                                     </router-link> 
+                                    @if(Auth::user()->rol_user === 1)
                                      <router-link :to="{name:'add.Proyect', params: { id_user: {{Auth::id()}} } }">
                                         <a href=""  class="dropdown-item">
                                             Add Project
                                         </a>
                                     </router-link>
+                                    @endif
                                   </div>
                             </div>
                         </li>

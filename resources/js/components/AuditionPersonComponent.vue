@@ -16,57 +16,63 @@
                                 <a :href="character.script_attached_audition" target="_blanck"> Attachment PDF</a>
                             </v-flex>
                             <v-flex xs12 sm12 md12 class="m-3">
-                                <h4>Questions </h4>
-                                <v-text-field 
-                                 v-if="q.related_answer.length == 0" 
-                                 v-for="(q,i) in character.questions" 
-                                 :label="q.question_proyect" 
-                                 v-model="q.answer_question" 
-                                 :key="i"></v-text-field>
-                                <v-btn color="success" @click="addAnswer" >Save Answer</v-btn>
-                                <v-btn color="info" @click="dialog = true" >Add Vaudition</v-btn>
+                                <v-btn color="info" @click="dialog = true">Add Vaudition</v-btn>
                             </v-flex>
                         </v-layout>
                     </v-container>
                 </v-flex>
-                <v-flex xs12 sm12 md4 class="justify-center m-3">
-                    <v-timeline dense>
-                        <v-timeline-item v-for="(ch, c) in character.vaudition_related" :key="c">
-                            <v-card class="elevation-2">
-                                <v-container>
-                                    <v-layout row wrap>
-                                        <v-flex xs12 sm12 md6 class="ml-3" v-if="ch.url_video_redsocial">
-                                            <v-container>
-                                                <v-layout row wrap>
-                                                    <v-flex xs12 sm12 md12>
-                                                        <a :href="ch.url_video_redsocial" target="_blanck">Link Vaudition</a>
-                                                    </v-flex>
-                                                </v-layout>
-                                            </v-container>
-                                        </v-flex>
-                                        <v-flex xs12 sm12 md12 v-if="ch.url_video_upload" >
-                                            <video width="270" height="200" controls>
-                                                <source :src="ch.url_video_upload" type="video/mp4">
-                                            </video>
-                                        </v-flex>
-                                        <v-flex xs12 sm12 md12>
-                                          <h4>Question answered</h4>
-                                           <ul>
-                                               <li v-for="q in character.questions" >
-                                                   {{q.question_proyect}}
-                                                   <ul>
-                                                       <li v-for="ans in q.related_answer" >
-                                                           {{ans.answer_question}}
-                                                       </li>
-                                                   </ul>
-                                               </li>
-                                           </ul> 
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-card>
-                        </v-timeline-item>
-                    </v-timeline>
+                <v-flex xs12 sm12 md4 class="m-3" v-for="(ch, c) in character.vaudition_related" :key="c">
+                    <v-card max-width="344" class="mx-auto">
+                        <v-list-item>
+                            <v-list-item-avatar color="grey"></v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-subtitle>{{ch.userPost.name}}</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-row v-if="character.vaudition_related.length == 0">
+                            <v-col>
+                                <v-col class="d-flex justify-center" v-if="">
+                                    <v-btn color="info" @click="dialog = true">Add Vaudition</v-btn>
+                                </v-col>
+                            </v-col>
+                        </v-row>
+                        <v-row class="d-flex">
+                            <v-col>
+                                <v-row>
+                                    <v-col v-if="ch.url_video_upload">
+                                        <video width="344" height="200" controls>
+                                            <source width="344" :src="ch.url_video_upload" type="video/mp4">
+                                        </video>
+                                    </v-col>
+                                    <v-col v-if="ch.url_video_redsocial">
+                                        <a :href="ch.url_video_redsocial" target="_blanck" class="btn btn-block success">Link Vaudition</a>
+                                    </v-col>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="12">
+                                    <h4>Questions </h4>
+                                    <v-text-field v-for="(q,i) in character.questions" :label="q.question_proyect" v-model="q.answer_question" :key="i" />
+                                    <v-btn color="success" @click="addAnswer">Save Answer</v-btn>
+                                </v-col>
+                                <v-col cols="12">
+                                    <h4>Question answered</h4>
+                                    <ul>
+                                        <li v-for="q in ch.questions">
+                                            {{q.question_proyect}}
+                                            <ul>
+                                                <li v-for="ans in q.related_answer">
+                                                    {{ans.answer_question}}
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -146,7 +152,7 @@ export default {
 
         },
         async addSceneAuditionLink() {
-            var url_audition_red,character_id, red_selected;
+            var url_audition_red, character_id, red_selected;
 
             url_audition_red = this.var_url_audition
             character_id = this.$route.params.id_character
@@ -154,7 +160,7 @@ export default {
 
             try {
                 const URL = `add-audition-scene`
-                let { data } = await axios.post(URL, {character_id, url_audition_red, red_selected })
+                let { data } = await axios.post(URL, { character_id, url_audition_red, red_selected })
                 this.getAuditionSpecific(this.$route.params.id_character);
                 this.var_red_selected = ''
                 this.var_url_audition = ''
@@ -169,13 +175,13 @@ export default {
             const URL = `save-questions`
             try {
                 let { data } = axios.post(URL, { questions: this.character.questions })
-                // this.getAuditionSpecific(this.$route.params.id_audition);
+                this.getAuditionSpecific(this.$route.params.id_character);
             } catch (e) {
                 console.log(e);
             }
         },
         async getAuditionSpecific(id) {
-            const URL = `user/${this.$route.params.id_user}/${id}/get-character-audition`
+            const URL = `user/${this.$route.params.id_user}/character/${id}/get-character-audition`
             var aud
             try {
                 let { data } = await axios(URL)

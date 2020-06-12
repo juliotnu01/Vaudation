@@ -13,6 +13,15 @@ use App\User;
 
 class ProyectController extends Controller
 {
+    public function getUserVaudition(User $user, $id)
+    {
+        try {
+            return $user->where('id' ,$id)->first();
+        } catch (Exception $e) {
+            throw new Exception($e, 1);
+            
+        }
+    }
     public function project(Proyect $project)
     {
         try {
@@ -87,7 +96,7 @@ class ProyectController extends Controller
                     $invitation->name = $value->name; 
                     $invitation->email = $value->email;  
                     $invitation->character_id = $character->id; 
-                    // $invitation->note = $var_project->invitation->note;
+                    $invitation->note = $value->note;
                     $invitation->save();
                     // Mail::to($value->email)->send(new InvitationsVaudition());
                 }

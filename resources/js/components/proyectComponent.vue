@@ -32,7 +32,7 @@
                     </v-row>
                     <v-row>
                         <v-col class="text-right">
-                            <v-btn color="primary" @click="var_step = 2">
+                            <v-btn color="primary" @click="addNameProject">
                                 Continue
                             </v-btn>
                         </v-col>
@@ -166,6 +166,7 @@
                                 <v-card-actions>
                                     <v-list-item class="grow">
                                         <v-row align="center" justify="end">
+                                            Add Invitations
                                             <v-btn :color="show === true ? 'info': 'default'" text @click.prevent="show = !show">
                                                 <v-icon class="mr-1">mdi-share-variant</v-icon>
                                             </v-btn>
@@ -327,10 +328,15 @@
     </v-app>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import pdf from "vue-pdf";
+
 export default {
     components: {
         pdf
+    },
+    computed: {
+        ...mapGetters(['project'])
     },
     data() {
         return {
@@ -357,6 +363,8 @@ export default {
             },
             pdfName: '',
             show: false,
+
+
         }
     },
     methods: {
@@ -368,8 +376,16 @@ export default {
             );
         },
         addQuerys() {
+            var valid  = this.questions.some(item => item.question === this.query)
+
+            if (valid) {
+                this.$swal('warning', 'Questions already created', 'warning')
+            }else if(this.query === ''){
+                this.$swal('warning', 'Input questions character cannot be empty', 'warning')
+            }else {
             this.questions.push({ question: this.query })
             this.query = ''
+            }
         },
         addQuestions() {
             this.var_step = 4
@@ -383,35 +399,21 @@ export default {
         },
         addInvitation() {
             var character = this.var_project.character.findIndex(item => item.name === this.var_name_character)
-            this.var_project.character[character].invitations.push({ name: this.invitation.name, email: this.invitation.email })
+            this.var_project.character[character].invitations.push({ name: this.invitation.name, email: this.invitation.email, note: this.invitation.note })
             this.invitations.push({ name: this.invitation.name, email: this.invitation.email })
             this.invitation.name = ''
             this.invitation.email = ''
+            this.invitation.note = ''
 
         },
         async addProject() {
 
-            const URL = `save-project`
 
-            this.var_project.character.forEach(async (item) => {
-
-                var form = new FormData()
-                form.append('project_name', this.var_project.name_project);
-                form.append('character', JSON.stringify(item));
-                form.append('script_file', item.script);
-                
-
-                try {
-                    let { data } = await axios.post(URL, form, { headers: { "Content-Type": "multipart/form-data" } })
-                    this.dialog_finish = true
-                    // this.limpiar();
-                    this.var_step = 1
-                } catch (e) {
-                    console.log(e);
-                }
-
-            })
-
+            this.$root.services.projectService.add(this.var_project.character, this.var_project.name_project)
+            this.$router.push({ name: 'dashboard.proyect', params: { userId: this.$route.params.id_user } })
+            this.dialog_finish = false
+            this.var_step = 1
+            this.limpiar()
         },
         limpiar() {
             this.query = ''
@@ -429,15 +431,25 @@ export default {
             this.pdfName = ''
         },
         addCharacter() {
-            this.var_step = 3
-            this.var_project.character.push({
-                name: this.var_name_character,
-                description: this.var_description_character,
-                script: '',
-                questions: [],
-                invitations: []
 
-            })
+            var valid = this.var_project.character.some(item => item.name === this.var_name_character)
+            if (valid) {
+                this.$swal('warning', 'this name of character already are created', 'warning')
+            } else if (this.var_name_character === '' || this.var_description_character === '') {
+                this.$swal('warning', 'It\'s necessary put a name and description of the character', 'warning')
+            } else {
+
+                this.var_step = 3
+                this.var_project.character.push({
+                    name: this.var_name_character,
+                    description: this.var_description_character,
+                    script: '',
+                    questions: [],
+                    invitations: []
+
+                })
+            }
+
         },
         AddAnotherCharacter() {
 
@@ -460,14 +472,13 @@ export default {
             try {
                 let { data } = await axios(URL)
                 this.var_projects_to_redirect = data.project_related
-                console.log({ proyectos: data })
             } catch (e) {
                 console.log(e);
             }
         },
         goToProject(id_project) {
-            window.location = `/home#/${this.$route.params.id_user}/user/${id_project}/dashboard-casting `
-            this.addProject()
+            this.$router.push({ name: 'dashboard.casting', params: { id_user: this.$route.params.id_user, id_project: id_project } })
+            this.$root.services.projectService.add(this.var_project.character, this.var_project.name_project)
         },
         addNewProject() {
             this.addProject()
@@ -490,7 +501,17 @@ export default {
         },
         LeaveAudtionAndSave() {
             this.addProject();
-            console.log({ p: this.var_project })
+        },
+        async addNameProject() {
+            await this.$root.services.projectService.get()
+            var valid = this.project.some(item => item.project_name === this.var_project.name_project)
+            if (valid) {
+                this.$swal('warning', 'this name project already exists', 'warning')
+            } else if (this.var_project.name_project === '') {
+                this.$swal('warning', 'It\'s necessary put a project name ', 'warning')
+            } else {
+                this.var_step = 2
+            }
         }
     }
 }

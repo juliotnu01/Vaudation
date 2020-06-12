@@ -2,7 +2,7 @@
     <v-app>
         <v-container>
             <v-layout row wrap>
-                <v-flex xs12 sm12 md12>
+                <v-flex xs12 sm12 md12 v-if="user.rol_user === 1">
                     <v-btn fab dark color="primary" @click="dialog_character = true">
                         <v-icon x-large color="white">mdi-plus</v-icon>
                     </v-btn>
@@ -107,6 +107,7 @@
     </v-app>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import pdf from "vue-pdf";
 export default {
     components: {
@@ -126,6 +127,10 @@ export default {
     },
     mounted() {
         this.getAudition();
+        this.$root.services.userService.get(this.$route.params.id_user)
+    },
+    computed: {
+        ...mapGetters(['user'])
     },
     methods: {
         PDFcharge(e) {

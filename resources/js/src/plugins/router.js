@@ -20,7 +20,7 @@ export default new Router({
             component: ProyectComponent
         },
         {
-            path: '/:id_user/user/:id_project/dashboard-casting',
+            path: '/user/:id_user/project/:id_project/dashboard-casting',
             name: 'dashboard.casting',
             component: AuditionDashboard
         },
@@ -30,7 +30,7 @@ export default new Router({
             component: AuditionComponent
         },
         {
-            path: '/project/:id_project/user/:id_user/character/:id_character/audition',
+            path: '/user/:id_user/project/:id_project/character/:id_character/audition',
             name: 'audition.person',
             component: AuditionPersonComponent
         },
