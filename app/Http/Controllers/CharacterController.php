@@ -26,7 +26,7 @@ class CharacterController extends Controller
 
                 foreach ($result->vauditionRelated as $key => $value) {
                     $value->questions = Question_character::where('character_id', $value->character_id)->with(['relatedAnswer' => function($q) use ($value) {
-                        $q->where('user_id', $value->user_id);
+                        $q->where('user_id',  $value->user_id);
                     }])->get();
 
                      $value->userPost = User::where('id', $value->user_id)->first();

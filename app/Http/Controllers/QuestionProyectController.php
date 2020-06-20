@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{question_character,Aswer};
+use App\Models\{Question_character,Aswer};
 use DB;
 use Auth;
 
@@ -18,7 +18,7 @@ class QuestionProyectController extends Controller
                     $answer->user_id = Auth::id();
                     $answer->save();
 
-                    $question = question_character::find($value['id']);
+                    $question = Question_character::find($value['id']);
                     $question->relatedAnswer()->attach($answer);
                 }
             });
