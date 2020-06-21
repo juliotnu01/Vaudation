@@ -31,3 +31,5 @@ Route::post('save-character', 'CharacterController@store');
 Route::post('save-questions', 'QuestionProyectController@store');
 Route::post('add-audition-scene', 'VauditionController@store');
 Route::get('{id}/get-user-vaudition', 'ProyectController@getUserVaudition');
+Route::get('/get-all-user-vaudition', 'ProyectController@getUserVauditionAll');
+Route::put('{id}/change-status-user-vaudition', 'ProyectController@changeStatusUser');

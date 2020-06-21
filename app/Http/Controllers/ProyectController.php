@@ -22,6 +22,25 @@ class ProyectController extends Controller
             
         }
     }
+     public function getUserVauditionAll(User $user)
+    {
+        try {
+            return $user->all();
+        } catch (Exception $e) {
+            throw new Exception($e, 1);
+            
+        }
+    }
+    public function changeStatusUser(Request $request, User $user, $id)
+    {
+        try {
+            $user->find($id)->update(["status_user" => $request->status_user]);
+            return ;
+        } catch (Exception $e) {
+            throw new Exception($e, 1);
+            
+        }
+    }
     public function project(Proyect $project)
     {
         try {

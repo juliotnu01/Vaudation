@@ -9,10 +9,12 @@ export const store =  new Vuex.Store({
         services,
         project: [],
         user: {},
+        users:[],
     },
     getters: {
         project: state => state.project,
-        user: state => state.user
+        user: state => state.user,
+        users: state => state.users
     },
     mutations: {
         setProject(state, data){
@@ -20,6 +22,9 @@ export const store =  new Vuex.Store({
         },
         setUser(state, data){
             state.user = data
+        },
+         setUsers(state, data){
+            state.users = data
         }
     },
     actions: {},

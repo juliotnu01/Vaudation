@@ -39,7 +39,7 @@
                         @if (Auth::check() && Auth::user()->status_user)
                         <li>
                             <div class="dropdown mr-1 small ">
-                                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Project
                                   </button>
                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -58,25 +58,6 @@
                                   </div>
                             </div>
                         </li>
-                        <!-- <li>
-                            <div class="dropdown mr-1 small ">
-                                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Casting
-                                  </button>
-                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <router-link :to="{name: 'dashboard.audition', params:{id_project: $route.params.id_project}}">
-                                        <a href=""  class="dropdown-item">
-                                            Dashboard
-                                        </a>
-                                    </router-link> 
-                                     <router-link :to="{name: 'audition', params:{id_project: $route.params.id_project}}">
-                                        <a href=""  class="dropdown-item">
-                                            Add Casting
-                                        </a>
-                                    </router-link>
-                                  </div>
-                            </div>
-                        </li> -->
                          @endif
                     </ul>
                     <!-- Right Side Of Navbar -->
@@ -97,6 +78,8 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
+
+
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -107,6 +90,11 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
+                                      <router-link :to="{name:'user.panel'}">
+                                        <a href=""  class="dropdown-item">
+                                            User Panel
+                                        </a>
+                                    </router-link>
                                 </div>
                             </li>
                         @endguest
