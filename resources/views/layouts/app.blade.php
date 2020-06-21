@@ -48,7 +48,7 @@
                                             Dashboard Project
                                         </a>
                                     </router-link> 
-                                    @if(Auth::user()->rol_user === 1 Auth::user()->rol_user === 3)
+                                    @if(Auth::user()->rol_user === 1 || Auth::user()->rol_user === 3)
                                      <router-link :to="{name:'add.Proyect', params: { id_user: {{Auth::id()}} } }">
                                         <a href=""  class="dropdown-item">
                                             Add Project
