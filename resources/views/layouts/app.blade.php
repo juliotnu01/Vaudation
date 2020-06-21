@@ -90,11 +90,13 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
+                                     @if (Auth::check() && Auth::user()->rol_user === 3)
                                       <router-link :to="{name:'user.panel'}">
                                         <a href=""  class="dropdown-item">
                                             User Panel
                                         </a>
                                     </router-link>
+                                    @endif
                                 </div>
                             </li>
                         @endguest
