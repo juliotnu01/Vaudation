@@ -20,6 +20,8 @@ class CreateInvitationsTable extends Migration
             $table->longText('note')->nullable();
             $table->bigInteger('character_id')->unsigned()->nullable();
             $table->foreign('character_id')->references('id')->on('character');
+            $table->string('route_invitation')->nullable();
+            $table->boolean('route_invitation_satus')->nullable()->default(true);
             $table->timestamps();
         });
     }

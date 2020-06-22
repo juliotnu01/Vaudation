@@ -22,10 +22,10 @@ class ProyectController extends Controller
             
         }
     }
-     public function getUserVauditionAll(User $user)
+     public function getUserVauditionAll(User $user, $id)
     {
         try {
-            return $user->all();
+            return $user->where('id', '!=', $id)->get();
         } catch (Exception $e) {
             throw new Exception($e, 1);
             
@@ -66,7 +66,6 @@ class ProyectController extends Controller
     public function store(Request $request, Proyect $project, Character $character, Question_character $questions)
     {
         $var_project = json_decode($request->character);
-        // dd($project->get()->last());
         
         try {
             return DB::transaction(function() use ($request, $project,$var_project, $character){
@@ -117,7 +116,7 @@ class ProyectController extends Controller
                     $invitation->character_id = $character->id; 
                     $invitation->note = $value->note;
                     $invitation->save();
-                    // Mail::to($value->email)->send(new InvitationsVaudition());
+                    Mail::to($value->email)->send(new InvitationsVaudition());
                 }
 
                 return Response($project);

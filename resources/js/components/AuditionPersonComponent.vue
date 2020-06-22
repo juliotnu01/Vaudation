@@ -5,23 +5,37 @@
                 <v-flex xs12 sm12 md12 class="elevation-1">
                     <v-container>
                         <v-layout row wrap>
-                            <v-flex xs12 sm12 md12 class="m-3">
-                                <h4> Character name :</h4>{{character.character_name}}
+                            <v-flex xs12 sm6 md6>
+                                <v-layout row wrap>
+                                    <v-flex xs12 sm12 md12 class="m-3">
+                                        <h4> Character name :</h4>{{character.character_name}}
+                                    </v-flex>
+                                    <v-flex xs12 sm12 md12 class="m-3">
+                                        <h4> character Description :</h4>{{character.description_character}} 
+                                    </v-flex>
+
+                                    <v-flex xs12 sm12 md12 class="m-3">
+                                        <h4>Script (pdf)</h4>
+                                        <a :href="character.script_attached_audition" target="_blanck"> Attachment script PDF</a>
+                                    </v-flex>
+                                    <v-flex xs12 sm12 md12 class="m-3" v-if="var_exist_vaudition">
+                                        <v-btn color="info" @click="addVauditionModal">Add Vaudition</v-btn>
+                                    </v-flex>
+                                </v-layout>
                             </v-flex>
-                            <v-flex xs12 sm12 md12 class="m-3">
-                                <h4> character Description :</h4>{{character.description_character}}
-                            </v-flex>
-                            <v-flex xs12 sm12 md12 class="m-3">
-                                <h1>pdf</h1>
-                                <a :href="character.script_attached_audition" target="_blanck"> Attachment PDF</a>
-                            </v-flex>
-                            <v-flex xs12 sm12 md12 class="m-3">
-                                <v-btn color="info" @click="dialog = true">Add Vaudition</v-btn>
+                            <v-flex xs12 sm6 md6>
+                              <h4>Some suggestions before registering your audition</h4>
+                              <ul>
+                                  <li>Read the description and script of the character well to enter context when auditioning, each character has attached a script in pdf format that can be downloaded.</li>
+                                  <li>To register the character's audition, you have to click on the button that says "add vaudition", you must choose one of the two options that appear there.</li>
+                                  <li>If you choose the first option when recording the audition, prepare before pressing the record button. You cannot stop and resume the recording unless you decide to stop and end the audition (it is a registration by user for each character).</li>
+                                  <li>Once the audition registration is finished, it immediately appears at the bottom, then it is necessary to answer some questions that will appear in your registry, if you do not answer those questions the addition will be incomplete.</li>
+                              </ul>
                             </v-flex>
                         </v-layout>
                     </v-container>
                 </v-flex>
-                <v-flex xs12 sm12 md4 class="m-3" v-for="(ch, c) in character.vaudition_related" :key="c">
+                <v-flex xs12 sm12 md4 class="mt-3" v-for="(ch, c) in character.vaudition_related" :key="c">
                     <v-card max-width="344" class="mx-auto">
                         <v-list-item>
                             <v-list-item-avatar color="grey"></v-list-item-avatar>
@@ -29,13 +43,6 @@
                                 <v-list-item-subtitle>{{ch.userPost.name}}</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
-                        <v-row v-if="character.vaudition_related.length == 0">
-                            <v-col>
-                                <v-col class="d-flex justify-center" v-if="">
-                                    <v-btn color="info" @click="dialog = true">Add Vaudition</v-btn>
-                                </v-col>
-                            </v-col>
-                        </v-row>
                         <v-row class="d-flex">
                             <v-col>
                                 <v-row>
@@ -52,7 +59,7 @@
                         </v-row>
                         <v-card-text>
                             <v-row>
-                                <v-col cols="12">
+                                <v-col cols="12" v-if="!ch.questionsResponse">
                                     <h4>Questions </h4>
                                     <v-text-field v-for="(q,i) in character.questions" :label="q.question_proyect" v-model="q.answer_question" :key="i" />
                                     <v-btn color="success" @click="addAnswer">Save Answer</v-btn>
@@ -85,6 +92,9 @@
                     <v-container>
                         <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
+                                <v-select :items="itemsSelectWayVaudition" v-model="wayVaudition" label="how do you want to register your vaudition" return-object item-text="text" clearable></v-select>
+                            </v-flex>
+                            <v-flex xs12 sm12 md12 v-if="wayVaudition.value === 1">
                                 <video class="elevation-4" id="video" width="450"></video>
                                 <button class="btn btn-primary" @click="grabarVideo">
                                     Record vaudition
@@ -93,7 +103,7 @@
                                     Stop / Finish vaudition
                                 </button>
                             </v-flex>
-                            <v-flex xs12 sm12 md12 class="m-3">
+                            <v-flex xs12 sm12 md12 class="m-3" v-if="wayVaudition.value === 2">
                                 <v-select v-model="var_red_selected" :items="items_red_social" label="Select Red Social" return-object item-text="name" outlined>
                                     <template v-slot:item="{item}">
                                         <v-icon>{{item.icon}}</v-icon>
@@ -101,7 +111,7 @@
                                     </template>
                                 </v-select>
                             </v-flex>
-                            <v-flex xs12 sm12 md12>
+                            <v-flex xs12 sm12 md12 v-if="wayVaudition.value === 2">
                                 <v-text-field label="Link to vaudition red social" v-model="var_url_audition"></v-text-field>
                             </v-flex>
                         </v-layout>
@@ -109,7 +119,7 @@
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
-                    <v-btn color="primary" block @click.prevent="addSceneAuditionLink">Save link and finish vaudition</v-btn>
+                    <v-btn color="primary" block @click.prevent="addSceneAuditionLink" v-if="wayVaudition.value === 2">Save link and finish vaudition</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -120,6 +130,11 @@ import { mdiYoutube, mdiVimeo } from '@mdi/js';
 export default {
     data() {
         return {
+            wayVaudition: {},
+            itemsSelectWayVaudition: [
+                { text: 'I want to record directly from vaudition', value: 1 },
+                { text: 'I have already recorded the audition and I have the link', value: 2 },
+            ],
             dialog: false,
             character: [],
             array_video: [],
@@ -132,6 +147,8 @@ export default {
             ],
             scene_id: '',
             var_red_selected: '',
+            var_exist_vaudition: true,
+            var_exist_response_question: false,
         }
     },
     watch: {
@@ -140,6 +157,16 @@ export default {
                 return;
             }
             this.enviar_video();
+        }
+    },
+    copmputed: {
+        isExistVaudition: {
+            get() {
+                return this.var_exist_vaudition = true
+            },
+            set(newVal) {
+                this.var_exist_vaudition = newVal
+            }
         }
     },
     mounted() {
@@ -173,19 +200,42 @@ export default {
         },
         async addAnswer() {
             const URL = `save-questions`
+            var result = this.character.questions.some(item => item.answer_question === null)
+
             try {
-                let { data } = axios.post(URL, { questions: this.character.questions })
-                this.getAuditionSpecific(this.$route.params.id_character);
+                if (result) {
+                   this.$swal('warning', 'you need to answer all the questions', 'warning')
+                }else{
+                    let { data } = axios.post(URL, { questions: this.character.questions })
+                    this.getAuditionSpecific(this.$route.params.id_character);
+                }
             } catch (e) {
                 console.log(e);
             }
         },
         async getAuditionSpecific(id) {
             const URL = `user/${this.$route.params.id_user}/character/${id}/get-character-audition`
-            var aud
             try {
                 let { data } = await axios(URL)
                 this.character = data
+                console.log({q:this.character.vaudition_related})
+
+                this.character.vaudition_related.forEach((item) =>  {
+
+                    item.questions.forEach((item2) =>  {
+                        this.var_exist_response_question = item2.related_answer.length
+                        
+                    });
+
+                    if (this.var_exist_response_question > 0) {
+                            item.questionsResponse =  true
+                    }else{
+                        item.questionsResponse =  false
+                    }
+                    
+                    console.log({item})
+                    
+                });
             } catch (e) {
                 console.log(e);
             }
@@ -267,6 +317,14 @@ export default {
                 console.log(error);
             }
         },
+        addVauditionModal() {
+            var result = this.character.vaudition_related.some(item => item.user_id === parseInt(this.$route.params.id_user))
+            if (result) {
+                this.$swal('warning', 'You already did an vaudition', 'warning')
+            } else {
+                this.dialog = true
+            }
+        }
     }
 }
 

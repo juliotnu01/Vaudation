@@ -37,7 +37,7 @@ export default new Router({
             component: AuditionPersonComponent
         },
          {
-            path: '/user-panel',
+            path: '/user/:id_user/user-panel/',
             name: 'user.panel',
             component: UserPanelComponent
         },

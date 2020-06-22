@@ -21,7 +21,7 @@ class CharacterController extends Controller
        
         try {
             $user = User::where('id', $id_user)->first();
-            if ($user->rol_user === 1) {
+            if ($user->rol_user === 1 || $user->rol_user === 3) {
                 $result = $character->with(['vauditionRelated', 'questions'])->where('id',$id_character)->first();
 
                 foreach ($result->vauditionRelated as $key => $value) {

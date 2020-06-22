@@ -10,11 +10,15 @@ export const store =  new Vuex.Store({
         project: [],
         user: {},
         users:[],
+        skeletonCardLoading: false,
+        auditions:{}
     },
     getters: {
         project: state => state.project,
         user: state => state.user,
-        users: state => state.users
+        users: state => state.users,
+        skeletonCardLoading: state => state.users,
+        auditions: state => state.auditions
     },
     mutations: {
         setProject(state, data){
@@ -25,6 +29,12 @@ export const store =  new Vuex.Store({
         },
          setUsers(state, data){
             state.users = data
+        },
+         setSkeletonCardLoading(state, data){
+            state.skeletonCardLoading = data
+        },
+         setauditions(state, data){
+            state.auditions = data
         }
     },
     actions: {},

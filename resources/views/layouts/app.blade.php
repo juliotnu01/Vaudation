@@ -91,7 +91,7 @@
                                         @csrf
                                     </form>
                                      @if (Auth::check() && Auth::user()->rol_user === 3)
-                                      <router-link :to="{name:'user.panel'}">
+                                      <router-link :to="{name:'user.panel',  params: { id_user: {{Auth::id()}} } }">
                                         <a href=""  class="dropdown-item">
                                             User Panel
                                         </a>

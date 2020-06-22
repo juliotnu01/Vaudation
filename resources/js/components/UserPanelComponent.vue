@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-data-table :headers="headers" :items="users" :items-per-page="5" class="elevation-1">
+        <v-data-table :headers="headers" :items="users" :items-per-page="5" class="elevation-1" :loading="loadingUser">
             <template v-slot:item.rol_user="{item}">
                 <td>{{item.rol_user == 1 ? 'Director' : item.rol_user == 2 ? 'Actor' : 'Admin'}}</td>
             </template>
@@ -18,13 +18,9 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            switch1: false,
-            headers: [{
-                    text: 'name',
-                    align: 'start',
-                    sortable: false,
-                    value: 'name',
-                },
+            loadingUser: true,
+            headers: [
+                { text: 'name', align: 'start', sortable: false, value: 'name' },
                 { text: 'Email', value: 'email' },
                 { text: 'Rol user', value: 'rol_user' },
                 { text: 'Status user', value: 'status_user' },
@@ -32,8 +28,10 @@ export default {
             ],
         }
     },
-    mounted() {
-        this.$root.services.userService.getAll()
+   async mounted() {
+        this.loadingUser = true
+        await this.$root.services.userService.getAll(this.$route.params.id_user)
+        this.loadingUser = false
     },
     computed: {
         ...mapGetters(['users'])
@@ -41,7 +39,7 @@ export default {
     methods: {
         async ChangeStatusUser(item) {
             await this.$root.services.userService.changeStatusUser(item)
-            await this.$root.services.userService.getAll()
+            await this.$root.services.userService.getAll(this.$route.params.id_user)
         }
     }
 

@@ -1,37 +1,42 @@
 <template>
     <v-app>
         <v-container>
-            <v-layout row wrap>
-                <v-flex xs12 sm12 md12 v-if="user.rol_user === 1">
+            <v-row>
+                <v-col cols="12" xs="12" sm="4" md="4" v-for="n in 12" v-if="skeletonCardLoading">
+                    <skeletonComponent/>
+                </v-col>
+                <v-col cols="12" v-if="!skeletonCardLoading && user.rol_user == 1 || user.rol_user == 3">
                     <v-btn fab dark color="primary" @click="dialog_character = true">
-                        <v-icon x-large color="white">mdi-plus</v-icon>
+                        <v-icon x-large color="white">mdi-plus</v-icon> 
                     </v-btn>
-                </v-flex>
-                <v-flex xs12 sm12 md4 v-for="(audition, key) in data_character" :key="audition.id" class="m-3">
-                    <v-card max-width="344">
+                    Add new character to project
+                </v-col>
+                <v-col cols="12" xs="12" sm="4" md="4" v-for="(audition, key) in auditions.character_related" :key="key" v-if="!skeletonCardLoading">
+                    <v-card max-width="344" >
+                        <v-list-item>
+                           <!--  <v-list-item-avatar color="grey"></v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title class="headline">Our Changing Planet</v-list-item-title>
+                                <v-list-item-subtitle>by Kurt Wagner</v-list-item-subtitle>
+                            </v-list-item-content> -->
+                        </v-list-item>
+                        <!-- <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="194"></v-img> -->
                         <v-card-text>
-                            <strong>
+                             <strong>
                                 <h2>Character: {{audition.character_name}}</h2>
                             </strong>: <br />
                             <strong>
-                                <h2> Description: {{audition.description_character}}</h2>
+                                <h4> Description: {{audition.description_character}}</h4>
                             </strong>: <br />
                         </v-card-text>
                         <v-card-actions>
                             <router-link :to="{ name: 'audition.person', params: { id_project: $route.params.id_project, id_user: $route.params.id_user, id_character: audition.id }}">
                                 READ
                             </router-link>
-                            <v-spacer></v-spacer>
-                            <v-btn icon>
-                                <v-icon>mdi-heart</v-icon>
-                            </v-btn>
-                            <v-btn icon>
-                                <v-icon>mdi-share-variant</v-icon>
-                            </v-btn>
                         </v-card-actions>
                     </v-card>
-                </v-flex>
-            </v-layout>
+                </v-col>
+            </v-row>
         </v-container>
         <v-dialog v-model="dialog_character" width="800">
             <v-card>
@@ -53,7 +58,7 @@
                             <v-row justify="center">
                                 <v-col cols="12" xs="12" sm="12" md="12">
                                     <h1>Questions</h1>
-                                </v-col> 
+                                </v-col>
                                 <v-col cols="12" xs="12" sm="12" md="12">
                                     <img src="https://img.icons8.com/ios/128/000000/ask-question.png" />
                                 </v-col>
@@ -107,11 +112,13 @@
     </v-app>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import pdf from "vue-pdf";
+import skeletonComponent from './skeletonComponent.vue'
 export default {
     components: {
-        pdf
+        pdf,
+        skeletonComponent
     },
     data() {
         return {
@@ -126,11 +133,12 @@ export default {
         }
     },
     mounted() {
-        this.getAudition();
+        this.$root.services.auditionService.get(this.$route.params.id_project)
         this.$root.services.userService.get(this.$route.params.id_user)
     },
     computed: {
-        ...mapGetters(['user'])
+        ...mapGetters(['user', 'auditions']),
+        ...mapState(['skeletonCardLoading'])
     },
     methods: {
         PDFcharge(e) {
@@ -139,23 +147,14 @@ export default {
                 URL.createObjectURL(e.target.files[0])
             );
         },
-        async getAudition() {
-            const URL = `${this.$route.params.id_project}/get-character`
-            try {
-                let { data } = await axios(URL)
-                this.data_character = data.character_related
-            } catch (e) {
-                console.log(e);
-            }
-        },
         addQuerys() {
             this.questions.push({ question: this.query })
             this.query = ''
         },
-        async addCharacter(){
+        async addCharacter() {
             const URL = `save-character`
             try {
-                 var form = new FormData()
+                var form = new FormData()
                 form.append('name', this.var_name_character);
                 form.append('description', this.var_description_character);
                 form.append('questions', JSON.stringify(this.questions));
@@ -163,8 +162,8 @@ export default {
                 form.append('id', this.$route.params.id_project);
                 let { data } = await axios.post(URL, form, { headers: { "Content-Type": "multipart/form-data" } })
                 this.dialog_character = false
-                this.getAudition();
-            } catch(e) {
+                 this.$root.services.auditionService.get(this.$route.params.id_project)
+            } catch (e) {
                 console.log(e);
             }
         }
