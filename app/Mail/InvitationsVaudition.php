@@ -16,9 +16,14 @@ class InvitationsVaudition extends Mailable
      *
      * @return void
      */
-    public function __construct()
+
+    protected $invitation;
+    protected $data;
+    public function __construct($invitation, $data)
     {
-        //
+        $this->invitation = $invitation;
+        $this->data = $data;
+
     }
 
     /**
@@ -28,6 +33,8 @@ class InvitationsVaudition extends Mailable
      */
     public function build()
     {
-        return $this->view('Mails.invitations');
+        $invitation = $this->invitation;
+        $data = $this->data;
+        return $this->view('Mails.invitations', compact(["invitation", "data"]));
     }
 }

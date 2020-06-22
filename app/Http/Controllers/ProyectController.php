@@ -115,8 +115,13 @@ class ProyectController extends Controller
                     $invitation->email = $value->email;  
                     $invitation->character_id = $character->id; 
                     $invitation->note = $value->note;
+                    $invitation->route_invitation = '/project/'.$project->id.'/character/'.$character->id.'/audition';
+                    $invitation->route_invitation_satus = true;
                     $invitation->save();
-                    Mail::to($value->email)->send(new InvitationsVaudition());
+
+                    $data = collect(['project_name' => $project->project_name, 'character_name' => $character->character_name, 'note' => $invitation->note, 'link' => env('APP_URL') ]);
+
+                    Mail::to($value->email)->send(new InvitationsVaudition($invitation, $data));
                 }
 
                 return Response($project);

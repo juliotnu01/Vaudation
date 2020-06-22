@@ -10,7 +10,6 @@ import UserPanelComponent from '../../components/UserPanelComponent.vue'
 Vue.use(Router)
 export default new Router({
     routes: [
-
         {
             path: '/user/:id_user',
             name: 'dashboard.proyect',
@@ -36,7 +35,7 @@ export default new Router({
             name: 'audition.person',
             component: AuditionPersonComponent
         },
-         {
+        {
             path: '/user/:id_user/user-panel/',
             name: 'user.panel',
             component: UserPanelComponent

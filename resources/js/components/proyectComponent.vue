@@ -409,7 +409,7 @@ export default {
         async addProject() {
 
 
-            this.$root.services.projectService.add(this.var_project.character, this.var_project.name_project, this.$route.path)
+            this.$root.services.projectService.add(this.var_project.character, this.var_project.name_project)
             this.$router.push({ name: 'dashboard.proyect', params: { userId: this.$route.params.id_user } })
             this.dialog_finish = false
             this.var_step = 1
