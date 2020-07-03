@@ -14,7 +14,9 @@
             </v-row>
             <v-row>
                 <v-col cols="12">
+                    <keep-alive>
                     <router-view></router-view>
+                    </keep-alive>
                 </v-col>
             </v-row>
         </v-container>
