@@ -2,7 +2,7 @@
     <v-app>
         <v-container>
             <v-row>
-                <v-col cols="12" xs="12" sm="4" md="4" v-for="n in 12" v-if="skeletonCardLoading">
+                <v-col cols="12" xs="12" sm="4" md="4" v-for="n in 12" :key="n" v-if="skeletonCardLoading">
                     <skeletonComponent/>
                 </v-col>
                 <v-col cols="12" v-if="!skeletonCardLoading && user.rol_user == 1 || user.rol_user == 3">
@@ -132,9 +132,9 @@ export default {
             pdfName: '',
         }
     },
-    mounted() {
-        this.$root.services.auditionService.get(this.$route.params.id_project)
-        this.$root.services.userService.get(this.$route.params.id_user)
+    async mounted() {
+        await this.$root.services.auditionService.get(this.$route.params.id_project)
+        await this.$root.services.userService.get(this.$route.params.id_user)
     },
     computed: {
         ...mapGetters(['user', 'auditions']),
@@ -152,7 +152,7 @@ export default {
             this.query = ''
         },
         async addCharacter() {
-            const URL = `save-character`
+            const URL = `/api/save-character`
             try {
                 var form = new FormData()
                 form.append('name', this.var_name_character);

@@ -13,8 +13,8 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 
 
 Vue.use(VueSweetalert2);
-Vue.use(Vuex)
-
+Vue.use(Vuex);
+Vue.component('auth-component', require('./components/dashboardInitComponent.vue').default);
 const app = new Vue({
     vuetify,
     router,

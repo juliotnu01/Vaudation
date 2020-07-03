@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-        <router-view></router-view>
-</div>
+        <auth-component user_auth="{{ Auth::id() }}" />
 @endsection

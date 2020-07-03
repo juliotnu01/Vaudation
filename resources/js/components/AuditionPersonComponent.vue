@@ -67,10 +67,10 @@
                                 <v-col cols="12">
                                     <h4>Question answered</h4>
                                     <ul>
-                                        <li v-for="q in ch.questions">
+                                        <li v-for="q in ch.questions" :key="q">
                                             {{q.question_proyect}}
                                             <ul>
-                                                <li v-for="ans in q.related_answer">
+                                                <li v-for="ans in q.related_answer" :key="ans">
                                                     {{ans.answer_question}}
                                                 </li>
                                             </ul>
@@ -127,6 +127,7 @@
 </template>
 <script>
 import { mdiYoutube, mdiVimeo } from '@mdi/js';
+import { mapState } from 'vuex';
 export default {
     data() {
         return {
@@ -160,6 +161,7 @@ export default {
         }
     },
     copmputed: {
+        ...mapState(['user']),
         isExistVaudition: {
             get() {
                 return this.var_exist_vaudition = true
@@ -169,8 +171,10 @@ export default {
             }
         }
     },
-    mounted() {
-        this.getAuditionSpecific(this.$route.params.id_character);
+    async mounted() {
+         await this.getAuditionSpecific(this.$route.params.id_character);
+         
+        
     },
     methods: {
         async addSceneAudition(scene, url = false) {
@@ -179,15 +183,16 @@ export default {
 
         },
         async addSceneAuditionLink() {
-            var url_audition_red, character_id, red_selected;
+            var url_audition_red, character_id, red_selected, id_user;
 
             url_audition_red = this.var_url_audition
             character_id = this.$route.params.id_character
             red_selected = this.var_red_selected.name
+            id_user = this.$route.params.id_user
 
             try {
-                const URL = `add-audition-scene`
-                let { data } = await axios.post(URL, { character_id, url_audition_red, red_selected })
+                const URL = `/api/add-audition-scene`
+                let { data } = await axios.post(URL, { character_id, url_audition_red, red_selected,id_user })
                 this.getAuditionSpecific(this.$route.params.id_character);
                 this.var_red_selected = ''
                 this.var_url_audition = ''
@@ -199,14 +204,14 @@ export default {
 
         },
         async addAnswer() {
-            const URL = `save-questions`
+            const URL = `/api/save-questions`
             var result = this.character.questions.some(item => item.answer_question === null)
 
             try {
                 if (result) {
                    this.$swal('warning', 'you need to answer all the questions', 'warning')
                 }else{
-                    let { data } = axios.post(URL, { questions: this.character.questions })
+                    let { data } = axios.post(URL, { questions: this.character.questions, id_user: this.$route.params.id_user })
                     this.getAuditionSpecific(this.$route.params.id_character);
                 }
             } catch (e) {
@@ -214,12 +219,13 @@ export default {
             }
         },
         async getAuditionSpecific(id) {
-            const URL = `user/${this.$route.params.id_user}/character/${id}/get-character-audition`
+            const URL = `/api/user/${this.$route.params.id_user}/character/${id}/get-character-audition`
             try {
                 let { data } = await axios(URL)
+                 this.$root.services.userService.get(this.$route.params.id_user)
+                
+                await axios.put(`/api/desactivate-invitation-vaudition`, {user: this.$route.params.id_user, project: this.$route.params.id_project, character: this.$route.params.id_character});
                 this.character = data
-                console.log({q:this.character.vaudition_related})
-
                 this.character.vaudition_related.forEach((item) =>  {
 
                     item.questions.forEach((item2) =>  {
@@ -232,9 +238,6 @@ export default {
                     }else{
                         item.questionsResponse =  false
                     }
-                    
-                    console.log({item})
-                    
                 });
             } catch (e) {
                 console.log(e);
@@ -249,7 +252,6 @@ export default {
                     video: true
                 });
                 let video = document.querySelector("#video");
-                console.log(video)
                 video.srcObject = stream;
                 video.play();
                 this.mediaRecorder = new MediaRecorder(stream);
@@ -259,7 +261,6 @@ export default {
                     this.add_video_data
                 );
                 this.mediaRecorder.addEventListener("stop", () => {
-                    console.log("grabación terminada");
                     video.pause();
                 });
             } catch (error) {
@@ -291,11 +292,12 @@ export default {
                 );
 
                 form.append("character_id", this.$route.params.id_character);
+                form.append("id_user", this.$route.params.id_user);
 
                 const {
                     data
                 } = await axios
-                    .post("/guardar-video", form, {
+                    .post("/api/guardar-video", form, {
                         headers: { "Content-Type": "multipart/form-data" }
                     })
 

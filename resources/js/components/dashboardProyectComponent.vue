@@ -2,7 +2,7 @@
     <v-app>
         <v-container>
             <v-row>
-                <v-col v-for="n  in 12"  cols="12" sm="4" md="4" xs="12" v-if="skeletonCardLoading">
+                <v-col v-for="n  in 12" :key="n" cols="12" sm="4" md="4" xs="12" v-if="skeletonCardLoading">
                     <skeletonComponent/>
                 </v-col>
                 <v-col v-for="p in project" :key="p.id" cols="12" sm="4" md="4" xs="12" v-if="!skeletonCardLoading">
@@ -38,11 +38,16 @@ export default {
     components:{
         skeletonComponent //skeletonCard
     },
-    mounted() {
-        this.$root.services.projectService.get()
+    async mounted() {
+        await this.$root.services.userService.get(this.$route.params.id_user)
+        if (this.user.rol_user == 1) {
+          await  this.$root.services.projectService.get(this.$route.params.id_user)
+        }else {
+           await this.$root.services.projectService.get()
+        }
     },
     computed: {
-        ...mapState(['project', 'skeletonCardLoading'])
+        ...mapState(['project', 'skeletonCardLoading', 'user'])
     }
 };
 

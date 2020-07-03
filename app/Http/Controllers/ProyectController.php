@@ -41,10 +41,15 @@ class ProyectController extends Controller
             
         }
     }
-    public function project(Proyect $project)
+    public function project(Proyect $project, $id_user = null)
     {
         try {
+            if ($id_user) {
+            return $project->where('user_id', $id_user)->get();    
+            }else {
             return $project->all();    
+
+            }
            
         } catch (Exception $e) {
             throw new Exception($e, 1);
@@ -72,7 +77,7 @@ class ProyectController extends Controller
                 if ($project->get()->last() === null) {
                    
                     $project->project_name = $request['project_name'];
-                    $project->user_id = Auth::id();
+                    $project->user_id = $request['id_user'];
                     $project->save();
 
                 } else {
@@ -82,7 +87,7 @@ class ProyectController extends Controller
                     } else {
 
                     $project->project_name = $request['project_name'];
-                    $project->user_id = Auth::id();
+                    $project->user_id = $request['id_user'];
                     $project->save();
 
                     }

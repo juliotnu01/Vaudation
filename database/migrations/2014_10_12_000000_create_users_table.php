@@ -17,10 +17,12 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('api_token', 60)->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('rol_user')->nullable();
             $table->boolean('status_user')->nullable()->default(false);
+            $table->integer('code_activation')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

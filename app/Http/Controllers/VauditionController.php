@@ -18,7 +18,7 @@ class VauditionController extends Controller
                 $vaudition->url_video_redsocial =  $request->url_audition_red;
                 $vaudition->type_redsocial =  $request->red_selected;
                 $vaudition->character_id =  $request->character_id;
-                $vaudition->user_id = Auth::id();
+                $vaudition->user_id = $request->id_user;
                 $vaudition->save();
 
 

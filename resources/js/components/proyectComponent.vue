@@ -409,7 +409,7 @@ export default {
         async addProject() {
 
 
-            this.$root.services.projectService.add(this.var_project.character, this.var_project.name_project)
+            this.$root.services.projectService.add(this.var_project.character, this.var_project.name_project , this.$route.params.id_user)
             this.$router.push({ name: 'dashboard.proyect', params: { userId: this.$route.params.id_user } })
             this.dialog_finish = false
             this.var_step = 1
@@ -468,7 +468,7 @@ export default {
             this.dialog_another_character_to_another_project = true
         },
         async getProjects() {
-            const URL = `get-project/user/${this.$route.params.id_user}`
+            const URL = `/api/get-project/user/${this.$route.params.id_user}`
             try {
                 let { data } = await axios(URL)
                 this.var_projects_to_redirect = data.project_related

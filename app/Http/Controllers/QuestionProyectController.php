@@ -15,7 +15,7 @@ class QuestionProyectController extends Controller
                 foreach ($request->questions as $key => $value) {
                     $answer = new Aswer();
                     $answer->answer_question = $value['answer_question'];
-                    $answer->user_id = Auth::id();
+                    $answer->user_id = $request->id_user;
                     $answer->save();
 
                     $question = Question_character::find($value['id']);

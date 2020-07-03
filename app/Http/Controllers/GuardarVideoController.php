@@ -18,7 +18,7 @@ class GuardarVideoController extends Controller
             return DB::transaction(function() use ($request, $audition, $path){
                 $audition->url_video_upload = asset($path);
                 $audition->character_id = $request->character_id;
-                $audition->user_id =  Auth::id();
+                $audition->user_id =  $request->id_user;
                 $audition->save();
             });
         } catch (Exception $e) {
