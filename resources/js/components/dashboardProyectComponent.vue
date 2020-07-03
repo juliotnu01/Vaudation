@@ -38,7 +38,7 @@ export default {
     components:{
         skeletonComponent //skeletonCard
     },
-    async mounted() {
+    async created() {
         await this.$root.services.userService.get(this.$route.params.id_user)
         if (this.user.rol_user == 1) {
           await  this.$root.services.projectService.get(this.$route.params.id_user)
