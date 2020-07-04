@@ -39,24 +39,20 @@ class CharacterController extends Controller
                 $result = $character->with(['vauditionRelated' => function($q) use ($id_user){
                     $q->where('user_id', $id_user);
                 }, 'questions'])->where('id',$id_character)->first();
-
-                foreach ($result->vauditionRelated as $key => $value) {
-                    $value->questions = Question_character::where('character_id', $value->character_id)->with(['relatedAnswer' => function($q) use ($value) {
-                        $q->where('user_id', $value->user_id);
-                    }])->get();
-                    
-                     $value->userPost = User::where('id', $value->user_id)->first();
-
+                if (count($result->vauditionRelated) > 0) {
+                    foreach ($result->vauditionRelated as $key => $value) {
+                        $value->questions = Question_character::where('character_id', $value->character_id)->with(['relatedAnswer' => function($q) use ($value) {
+                            $q->where('user_id', $value->user_id);
+                        }])->get();
+                         $value->userPost = User::where('id', $value->user_id)->first();
+                    }
                 }
-
                 return $result;
             }
         } catch (Exception $e) {
             
         }
-        // return $Proyect->with(['CharacterRelated' => function($q) use ($id_character){
-        //     $q->where('id', $id_character)->get();
-        // }])->where('id',  $id_proyect)->first();
+        
     }
 
     public function store(Request $request , Character $character)

@@ -17,7 +17,6 @@ class QuestionProyectController extends Controller
                     $answer->answer_question = $value['answer_question'];
                     $answer->user_id = $request->id_user;
                     $answer->save();
-
                     $question = Question_character::find($value['id']);
                     $question->relatedAnswer()->attach($answer);
                 }
