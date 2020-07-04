@@ -67,10 +67,10 @@
                                 <v-col cols="12">
                                     <h4>Question answered</h4>
                                     <ul>
-                                        <li v-for="q in ch.questions" :key="q">
+                                        <li v-for="(q, qx) in ch.questions" :key="qx">
                                             {{q.question_proyect}}
                                             <ul>
-                                                <li v-for="ans in q.related_answer" :key="ans">
+                                                <li v-for="(ans, ix) in q.related_answer" :key="ix">
                                                     {{ans.answer_question}}
                                                 </li>
                                             </ul>
