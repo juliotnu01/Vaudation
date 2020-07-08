@@ -254,10 +254,12 @@ export default {
                         this.var_exist_response_question = item2.related_answer.length
 
                     });
-                    
+
                     item.userPost.has_contact_user.forEach((item3) =>  {
                         if (parseInt(item3.character_id) === parseInt(this.$route.params.id_character)){
                             item.chosenActor = true
+                        }else {
+                            item.chosenActor = false
                         }
 
                     });
