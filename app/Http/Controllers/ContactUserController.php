@@ -22,7 +22,7 @@ class ContactUserController extends Controller
             'note' => $request->note,
             'email_contact' => $user->email,
             'user_id' => $user->id,
-            'character' => $request->character
+            'character_id' => $request->character
         ]);
 
     }
