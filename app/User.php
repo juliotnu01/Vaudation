@@ -48,6 +48,6 @@ class User extends Authenticatable
     }
     public function hasContactUser()
     {
-        return $this->hasMany(ContactUser::class, 'user_id');
+        return $this->hasMany('App\Models\ContactUser', 'user_id');
     }
 }
