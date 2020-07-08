@@ -11,15 +11,22 @@ import {mapState} from 'vuex'
 import 'sweetalert2/dist/sweetalert2.min.css'
  
 
+router.beforeEach((to, from, next) => {
+    next();
+    console.log({to, from, next})
+})
 
 Vue.use(VueSweetalert2);
 Vue.use(Vuex);
 Vue.component('auth-component', require('./components/dashboardInitComponent.vue').default);
+Vue.component('loading', require('./components/loadingComponent.vue').default);
 const app = new Vue({
     vuetify,
     router,
     store,
     computed: {
         ...mapState(['services'])
-    }
+    },
 }).$mount('#app');
+
+

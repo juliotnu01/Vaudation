@@ -20,4 +20,10 @@ export default class userService {
         }
         let {data} = await axios.put(`/api/${item.id}/change-status-user-vaudition`, item)
     }
+
+    async selectedUser(character, user, note){
+        const URL = '/api/contact-vauditioner'
+
+        let {data} = await axios.post(URL, {character, user, note})
+    }
 }

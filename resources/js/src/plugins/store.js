@@ -11,16 +11,21 @@ export const store =  new Vuex.Store({
         user: {},
         users:[],
         skeletonCardLoading: false,
-        auditions:{}
+        auditions:{},
+        overlay:true
     },
     getters: {
         project: state => state.project,
         user: state => state.user,
         users: state => state.users,
         skeletonCardLoading: state => state.users,
-        auditions: state => state.auditions
+        auditions: state => state.auditions,
+        overlay: state => state.overlay  
     },
     mutations: {
+        setOverlay(state, data){
+            state.overlay = data
+        },
         setProject(state, data){
             state.project = data
         },

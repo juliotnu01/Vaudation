@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->integer('rol_user')->nullable();
             $table->boolean('status_user')->nullable()->default(false);
             $table->integer('code_activation')->nullable();
+            $table->boolean('actorHasbinContact')->nullable()->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

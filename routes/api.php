@@ -28,3 +28,4 @@ use Illuminate\Support\Facades\Route;
     Route::get('{id}/get-all-user-vaudition', 'ProyectController@getUserVauditionAll');
     Route::put('{id}/change-status-user-vaudition', 'ProyectController@changeStatusUser');
     Route::put('/desactivate-invitation-vaudition', 'InvitationController@desactiveInvitation');
+    Route::post('/contact-vauditioner', 'ContactUserController@contacUser');

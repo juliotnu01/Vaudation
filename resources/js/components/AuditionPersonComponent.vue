@@ -11,9 +11,8 @@
                                         <h4> Character name :</h4>{{character.character_name}}
                                     </v-flex>
                                     <v-flex xs12 sm12 md12 class="m-3">
-                                        <h4> character Description :</h4>{{character.description_character}} 
+                                        <h4> character Description :</h4>{{character.description_character}}
                                     </v-flex>
-
                                     <v-flex xs12 sm12 md12 class="m-3">
                                         <h4>Script (pdf)</h4>
                                         <a :href="character.script_attached_audition" target="_blanck"> Attachment script PDF</a>
@@ -24,25 +23,27 @@
                                 </v-layout>
                             </v-flex>
                             <v-flex xs12 sm6 md6>
-                              <h4>Some suggestions before registering your audition</h4>
-                              <ul>
-                                  <li>Read the description and script of the character well to enter context when auditioning, each character has attached a script in pdf format that can be downloaded.</li>
-                                  <li>To register the character's audition, you have to click on the button that says "add vaudition", you must choose one of the two options that appear there.</li>
-                                  <li>If you choose the first option when recording the audition, prepare before pressing the record button. You cannot stop and resume the recording unless you decide to stop and end the audition (it is a registration by user for each character).</li>
-                                  <li>Once the audition registration is finished, it immediately appears at the bottom, then it is necessary to answer some questions that will appear in your registry, if you do not answer those questions the addition will be incomplete.</li>
-                              </ul>
+                                <h4>Some suggestions before registering your audition</h4>
+                                <ul>
+                                    <li>Read the description and script of the character well to enter context when auditioning, each character has attached a script in pdf format that can be downloaded.</li>
+                                    <li>To register the character's audition, you have to click on the button that says "add vaudition", you must choose one of the two options that appear there.</li>
+                                    <li>If you choose the first option when recording the audition, prepare before pressing the record button. You cannot stop and resume the recording unless you decide to stop and end the audition (it is a registration by user for each character).</li>
+                                    <li>Once the audition registration is finished, it immediately appears at the bottom, then it is necessary to answer some questions that will appear in your registry, if you do not answer those questions the addition will be incomplete.</li>
+                                </ul>
                             </v-flex>
                         </v-layout>
                     </v-container>
                 </v-flex>
                 <v-flex xs12 sm12 md4 class="mt-3" v-for="(ch, c) in character.vaudition_related" :key="c">
-                    <v-card max-width="344" class="mx-auto">
+                    <v-card max-width="344" class="mx-auto" :class=" ch.chosenActor ? 'bg-success' : ''  ">
                         <v-list-item>
                             <v-list-item-avatar color="grey"></v-list-item-avatar>
                             <v-list-item-content>
                                 <v-list-item-subtitle>{{ch.userPost.name}}</v-list-item-subtitle>
+                                <strong>{{ch.chosenActor ? 'Selected' : ''  }}</strong>
                             </v-list-item-content>
                         </v-list-item>
+                        
                         <v-row class="d-flex">
                             <v-col>
                                 <v-row>
@@ -76,6 +77,9 @@
                                             </ul>
                                         </li>
                                     </ul>
+                                </v-col>
+                                <v-col>
+                                    <v-btn v-if="user.rol_user == 1 || user.rol_user == 3 " color="success" @click="openDialogVauditioner(ch.userPost)">Selection Vaudiotioner</v-btn>
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -123,14 +127,31 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="dialog_preSeleccion" persistent max-width="500px" transition="dialog-transition">
+            <v-card>
+                <v-container>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-textarea type="textarea" label="Note" placeholder="Write an additional note that will be sent to you by email user" v-model="var_note_actor_selected"></v-textarea>
+                        </v-col>
+                        <v-col>
+                            <v-btn color="success" block @click="SelectionActor()" >Send Selection</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card>
+        </v-dialog>
     </v-app>
 </template>
 <script>
+import {  mapGetters } from 'vuex';
 import { mdiYoutube, mdiVimeo } from '@mdi/js';
-import { mapState } from 'vuex';
 export default {
     data() {
         return {
+            var_user_actor_selected: '',
+            var_note_actor_selected: '',
+            dialog_preSeleccion: false,
             wayVaudition: {},
             itemsSelectWayVaudition: [
                 { text: 'I want to record directly from vaudition', value: 1 },
@@ -152,6 +173,12 @@ export default {
             var_exist_response_question: false,
         }
     },
+    async mounted() {
+        await this.getAuditionSpecific(this.$route.params.id_character);
+
+        await this.$root.services.userService.get(this.$route.params.id_user)
+
+    },
     watch: {
         array_video(newVal, oldVal) {
             if (!newVal.length) {
@@ -160,8 +187,8 @@ export default {
             this.enviar_video();
         }
     },
-    copmputed: {
-        ...mapState(['user']),
+    computed: {
+        ...mapGetters(['user']),
         isExistVaudition: {
             get() {
                 return this.var_exist_vaudition = true
@@ -170,11 +197,6 @@ export default {
                 this.var_exist_vaudition = newVal
             }
         }
-    },
-    async mounted() {
-         await this.getAuditionSpecific(this.$route.params.id_character);
-         
-        
     },
     methods: {
         async addSceneAudition(scene, url = false) {
@@ -192,7 +214,7 @@ export default {
 
             try {
                 const URL = `/api/add-audition-scene`
-                let { data } = await axios.post(URL, { character_id, url_audition_red, red_selected,id_user })
+                let { data } = await axios.post(URL, { character_id, url_audition_red, red_selected, id_user })
                 this.getAuditionSpecific(this.$route.params.id_character);
                 this.var_red_selected = ''
                 this.var_url_audition = ''
@@ -209,8 +231,8 @@ export default {
 
             try {
                 if (result) {
-                   this.$swal('warning', 'you need to answer all the questions', 'warning')
-                }else{
+                    this.$swal('warning', 'you need to answer all the questions', 'warning')
+                } else {
                     let { data } = axios.post(URL, { questions: this.character.questions, id_user: this.$route.params.id_user })
                     this.getAuditionSpecific(this.$route.params.id_character);
                 }
@@ -222,22 +244,31 @@ export default {
             const URL = `/api/user/${this.$route.params.id_user}/character/${id}/get-character-audition`
             try {
                 let { data } = await axios(URL)
-                 this.$root.services.userService.get(this.$route.params.id_user)
                 
-                await axios.put(`/api/desactivate-invitation-vaudition`, {user: this.$route.params.id_user, project: this.$route.params.id_project, character: this.$route.params.id_character});
-                this.character = data
-                this.character.vaudition_related.forEach((item) =>  {
 
-                    item.questions.forEach((item2) =>  {
+                await axios.put(`/api/desactivate-invitation-vaudition`, { user: this.$route.params.id_user, project: this.$route.params.id_project, character: this.$route.params.id_character });
+                this.character = data
+                this.character.vaudition_related.forEach((item) => {
+
+                    item.questions.forEach((item2) => {
                         this.var_exist_response_question = item2.related_answer.length
-                        
+
+                    });
+                    
+                    item.userPost.has_contact_user.forEach((item3) =>  {
+                        if (parseInt(item3.character_id) === parseInt(this.$route.params.id_character)){
+                            item.chosenActor = true
+                        }
+
                     });
 
                     if (this.var_exist_response_question > 0) {
-                            item.questionsResponse =  true
-                    }else{
-                        item.questionsResponse =  false
+                        item.questionsResponse = true
+                    } else {
+                        item.questionsResponse = false
                     }
+
+
                 });
             } catch (e) {
                 console.log(e);
@@ -326,8 +357,22 @@ export default {
             } else {
                 this.dialog = true
             }
+        },
+        openDialogVauditioner(user){
+            console.log()
+            this.var_user_actor_selected = user
+            this.dialog_preSeleccion = true
+        },
+        async SelectionActor(){
+            var character_id, id_user,  note;
+            character_id = this.$route.params.id_character
+            id_user = this.var_user_actor_selected.id
+            note = this.var_note_actor_selected
+            this.$root.services.userService.selectedUser(character_id, id_user, note)
+               await this.getAuditionSpecific(this.$route.params.id_character);
+            this.dialog_preSeleccion = false
         }
     }
-}
+};
 
 </script>

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Proyect;
+use App\Models\ContactUser;
 
 
 
@@ -20,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'rol_user', 'status_user', 'code_activation', 'api_token'
+        'name', 'email', 'password', 'rol_user', 'status_user', 'code_activation', 'api_token', 'actorHasbinContact'
     ];
 
     /**
@@ -44,5 +45,9 @@ class User extends Authenticatable
     public function projectRelated()
     {
         return $this->hasMany(Proyect::class, 'user_id');
+    }
+    public function hasContactUser()
+    {
+        return $this->hasMany(ContactUser::class, 'user_id');
     }
 }

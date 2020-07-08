@@ -29,7 +29,8 @@ class CharacterController extends Controller
                         $q->where('user_id',  $value->user_id);
                     }])->get();
 
-                     $value->userPost = User::where('id', $value->user_id)->first();
+                     $value->userPost = User::with('hasContactUser')->where('id', $value->user_id)->first();
+                     
 
                 }
 
@@ -44,7 +45,7 @@ class CharacterController extends Controller
                         $value->questions = Question_character::where('character_id', $value->character_id)->with(['relatedAnswer' => function($q) use ($value) {
                             $q->where('user_id', $value->user_id);
                         }])->get();
-                         $value->userPost = User::where('id', $value->user_id)->first();
+                         $value->userPost = User::with('hasContactUser')->where('id', $value->user_id)->first();
                     }
                 }
                 return $result;

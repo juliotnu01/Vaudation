@@ -13,10 +13,11 @@ use App\User;
 
 class ProyectController extends Controller
 {
-    public function getUserVaudition(User $user, $id)
+    
+    public function getUserVaudition($id)
     {
         try {
-            return $user->where('id' ,$id)->first();
+            return User::where('id' ,$id)->first();
         } catch (Exception $e) {
             throw new Exception($e, 1);
             
